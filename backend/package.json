@@ -1,0 +1,24 @@
+{
+  "name": "Conciliador",
+  "version": "0.0.1",
+  "description": "Conciliador de transacciones",
+  "main": "server.js",
+  "scripts": {
+    "dev": "nodemon server.js"
+  },
+  "keywords": [
+    "nodejs",
+    "express",
+    "rest",
+    "api",
+    "mongodb"
+  ],
+  "author": "IllustriousLoop",
+  "license": "MIT",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.1",
+    "express": "^4.18.1",
+    "mongoose": "^6.4.2"
+  }
+}
