@@ -9,7 +9,7 @@ var corsOptions = {
   origin: process.env.FRONTEND_URL,
 };
 
-app.use(cors(corsOptions));
+app.use(cors());
 
 // parse requests of application/json
 app.use(express.json());
