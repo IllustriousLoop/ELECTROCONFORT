@@ -8,6 +8,9 @@
       "name": "Frontend",
       "path": "../frontend"
     },
-    
+    {
+      "name": "Main",
+      "path": "../"
+    },
   ]
 }
