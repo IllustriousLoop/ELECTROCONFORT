@@ -1,7 +1,7 @@
 {
-  "name": "Conciliador",
+  "name": "api_electrocofort",
   "version": "0.0.1",
-  "description": "Conciliador de transacciones",
+  "description": "api electrocofort",
   "main": "server.js",
   "scripts": {
     "dev": "nodemon server.js"
