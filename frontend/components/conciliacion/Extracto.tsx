@@ -1,24 +1,12 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
-import { apiUrl, columnsExtracto, conciliacion } from "../../utils";
+import { apiUrl, columnsExtracto, conciliacion } from "../../utils/apiContext";
 import { DataGridPro } from "@mui/x-data-grid-pro";
 import { GridToolbar } from "@mui/x-data-grid";
 import { Box, Button, Alert } from "@mui/material";
 
-const Extracto = (props) => {
-  const [extracto, setExtracto] = useState([]);
+const Extracto = ({ extracto, month, apiUrl }) => {
   const [pageSize, setPageSize] = useState(200);
-
-  useEffect(() => {
-    axios
-      .get(`${apiUrl}/extracto/?MES=${props.MES}`)
-      .then((res) => {
-        setExtracto(res.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, []);
 
   return (
     <>
@@ -34,7 +22,7 @@ const Extracto = (props) => {
         <Button
           variant="contained"
           color="primary"
-          onClick={() => conciliacion(extracto, props.MES)}
+          onClick={() => conciliacion(apiUrl, extracto, month)}
         >
           Conciliar Extracto
         </Button>

@@ -1,7 +1,7 @@
 import React from "react";
 import { DataGridPro } from "@mui/x-data-grid-pro";
 import { GridToolbar } from "@mui/x-data-grid";
-import { columnsTarjetasR } from "../../utils";
+import { columnsTarjetasR } from "../../utils/apiContext";
 
 const TarjetasR = (props) => {
   return (

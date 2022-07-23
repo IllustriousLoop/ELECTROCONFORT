@@ -1,7 +1,6 @@
 import axios from "axios";
 
-export const apiUrl =
-  import.meta.env.VITE_BACKEND || "http://localhost:8080/api";
+let apiUrl = "http://localhost:8000/api";
 
 export const dateNormalizer = (params, name) =>
   params.row[name] ? new Date(params.row[name]).toLocaleDateString() : "";
@@ -319,7 +318,7 @@ const terminales = [15969009, 15969017, 15969066, 15969082, 15969090];
 const franquicias = ["DCN", "MNS", "VNS"];
 const transacciones = [6, 26, 420, 78];
 
-export const findAsociados = (ext = [], month = 1) => {
+export const findAsociados = (api,ext = [], month = 1) => {
   const mes = arrayTodosLosDiasDeUnMes(month, 2022);
   terminales.forEach((terminal) => {
     const filtTer = ext.filter(
@@ -342,7 +341,7 @@ export const findAsociados = (ext = [], month = 1) => {
           filtTrans.forEach((extracto) => {
             axios
               .get(
-                `${apiUrl}/tarjetascompleto/specific/${terminal}/${franquicia}/${dia.getTime()}/${transaccion}/?MES=${month}`
+                `${api}/tarjetascompleto/specific/${terminal}/${franquicia}/${dia.getTime()}/${transaccion}/?MES=${month}`
               )
               .then((res) => {
                 const data = res.data;
@@ -368,7 +367,7 @@ export const findAsociados = (ext = [], month = 1) => {
                     ids.push(ex["id"]);
                   });
                   axios
-                    .put(`${apiUrl}/tarjetasr/${extracto.id}?MES=${mes}`, {
+                    .put(`${api}/tarjetasr/${extracto.id}?MES=${mes}`, {
                       asociado: ids,
                     })
                     .then((res) => {
@@ -571,7 +570,8 @@ const debitos = (data, mes) => {
     });
 };
 
-export const conciliacion = (data, mes) => {
+export const conciliacion = (api, data, mes) => {
+  apiUrl = api;
   gastosBancarios(data, mes);
   tarjetas(data, mes);
   creditos(data, mes);

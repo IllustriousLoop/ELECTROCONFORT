@@ -1,8 +1,5 @@
-import React from "react";
-import ReactDOM from "react-dom/client";
-import App from "./App";
+import type { AppProps } from "next/app";
 import { LicenseInfo } from "@mui/x-data-grid-pro";
-
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 
 const darkTheme = createTheme({
@@ -14,10 +11,13 @@ const darkTheme = createTheme({
 LicenseInfo.setLicenseKey(
   "x0jTPl0USVkVZV0SsMjM1kDNyADM5cjM2ETPZJVSQhVRsIDN0YTM6IVREJ1T0b9586ef25c9853decfa7709eee27a1e"
 );
-ReactDOM.createRoot(document.getElementById("root")).render(
-  <React.StrictMode>
+
+function MyApp({ Component, pageProps }: AppProps) {
+  return (
     <ThemeProvider theme={darkTheme}>
-      <App />
+      <Component {...pageProps} />
     </ThemeProvider>
-  </React.StrictMode>
-);
+  );
+}
+
+export default MyApp;

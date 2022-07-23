@@ -2,7 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import TarjetasCompleto from "./tarjetas/TarjetasCompleto";
 import TarjetasR from "./tarjetas/TarjetasR";
-import { findAsociados, apiUrl } from "../utils";
+import { findAsociados } from "../utils/apiContext";
 
 import {
   Box,
@@ -12,9 +12,8 @@ import {
   Switch,
 } from "@mui/material";
 
-function Tarjetas(props) {
+function Tarjetas({ tarjetasr, apiUrl, month }) {
   const [aux, setAux] = useState([]);
-  const [ext, setExt] = useState([]);
   const [asociado, setAsociado] = useState(true);
   const [view, setView] = useState(false);
   const [selectionModel, setSelectionModel] = useState([]);
@@ -26,23 +25,15 @@ function Tarjetas(props) {
   };
 
   useEffect(() => {
-    axios
-      .get(`${apiUrl}/tarjetasr/?MES=${props.MES}`)
-      .then((res) => {
-        setExt(res.data);
-        if (res.data[0]["asociado"].length === 0) {
-          setView(false);
-          setAsociado(false);
-        } else {
-          setView(true);
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    if (tarjetasr[0]["asociado"].length === 0) {
+      setView(false);
+      setAsociado(false);
+    } else {
+      setView(true);
+    }
     if (!asociado) {
       axios
-        .get(`${apiUrl}/tarjetascompleto/?MES=${props.MES}`)
+        .get(`${apiUrl}/tarjetascompleto/?MES=${month}`)
         .then((res) => {
           setAux(res.data);
         })
@@ -57,11 +48,11 @@ function Tarjetas(props) {
   useEffect(() => {
     if (selectionModel.length > 0 && asociado) {
       axios
-        .get(`${apiUrl}/tarjetasr/${selectionModel[0]}/?MES=${props.MES}`)
+        .get(`${apiUrl}/tarjetasr/${selectionModel[0]}/?MES=${month}`)
         .then((res) => {
           axios
             .post(
-              `${apiUrl}/tarjetascompleto/ids/?MES=${props.MES}`,
+              `${apiUrl}/tarjetascompleto/ids/?MES=${month}`,
               JSON.stringify(res.data["asociado"]),
               {
                 headers: { "Content-Type": "application/json" },
@@ -78,6 +69,7 @@ function Tarjetas(props) {
         });
     }
   }, [selectionModel]);
+
   return (
     <>
       <Box sx={{ height: "10vh", width: "100%" }}>
@@ -93,7 +85,7 @@ function Tarjetas(props) {
             <Button
               variant="contained"
               color="primary"
-              onClick={() => findAsociados(ext, props.MES)}
+              onClick={() => findAsociados(apiUrl, tarjetasr, month)}
             >
               Buscar Asociados
             </Button>
@@ -102,7 +94,7 @@ function Tarjetas(props) {
       </Box>
       <Box sx={{ height: "48vh", width: "100%" }}>
         <TarjetasR
-          data={ext}
+          data={tarjetasr}
           selectionModel={selectionModel}
           setSelectionModel={setSelectionModel}
         />

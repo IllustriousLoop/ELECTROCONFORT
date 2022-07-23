@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { DataGridPro } from "@mui/x-data-grid-pro";
 import { GridToolbar } from "@mui/x-data-grid";
-import { columnsTarjetasCompleto } from "../../utils";
+import { columnsTarjetasCompleto } from "../../utils/apiContext";
 import { Grid, Typography, Box } from "@mui/material";
 
 const Toolbar = () => {
