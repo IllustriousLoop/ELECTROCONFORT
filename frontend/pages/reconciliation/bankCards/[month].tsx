@@ -2,8 +2,8 @@ import type { NextPage, GetServerSideProps } from "next";
 import GetSummaryCards from "../../../ts/types/bank/getSummaryCards.types";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import TarjetasCompleto from "../../../components/tarjetas/TarjetasCompleto";
-import TarjetasR from "../../../components/tarjetas/TarjetasR";
+import AllCards from "../../../components/card/AllCards";
+import SummaryCards from "../../../components/card/SummaryCards";
 import {
   Box,
   Button,
@@ -37,20 +37,20 @@ const findAssociateValues = async (
 
 const ReconciliationByMonth: NextPage<Props> = ({ summaryCards, month }) => {
   const [allCards, setAllCards] = useState([]);
-  const [asociado, setAsociado] = useState(true);
+  const [associated, setAssociated] = useState(true);
   const [view, setView] = useState(false);
   const [selection, setSelection] = useState<any>([]);
   const [sum, setSum] = useState<number>(0);
 
-  const handleChange = (event: any) => setAsociado(event.target.checked);
+  const handleChange = (event: any) => setAssociated(event.target.checked);
 
   useEffect(() => {
     if (summaryCards[0]["asociado"]?.length === 0) {
       setView(false);
-      setAsociado(false);
+      setAssociated(false);
     } else setView(true);
 
-    if (!asociado) {
+    if (!associated) {
       axios
         .get(`/api/bank/allCards/?month=${month}`)
         .then((res) => {
@@ -60,10 +60,10 @@ const ReconciliationByMonth: NextPage<Props> = ({ summaryCards, month }) => {
           console.log(err);
         });
     } else setAllCards([]);
-  }, [asociado]);
+  }, [associated]);
 
   useEffect(() => {
-    if (selection.length > 0 && asociado) {
+    if (selection.length > 0 && associated) {
       (async () => {
         const {
           data: { cards, sum },
@@ -89,7 +89,7 @@ const ReconciliationByMonth: NextPage<Props> = ({ summaryCards, month }) => {
         {view ? (
           <FormGroup>
             <FormControlLabel
-              control={<Switch checked={asociado} onChange={handleChange} />}
+              control={<Switch checked={associated} onChange={handleChange} />}
               label="Modo de Asociacion"
             />
           </FormGroup>
@@ -106,14 +106,14 @@ const ReconciliationByMonth: NextPage<Props> = ({ summaryCards, month }) => {
         )}
       </Box>
       <Box sx={{ height: "48vh", width: "100%" }}>
-        <TarjetasR
+        <SummaryCards
           summaryCards={summaryCards}
           selection={selection}
           setSelection={setSelection}
         />
       </Box>
       <Box sx={{ height: "50vh", width: "100%" }}>
-        <TarjetasCompleto allCards={allCards} sum={sum} />
+        <AllCards allCards={allCards} sum={sum} />
       </Box>
     </>
   );

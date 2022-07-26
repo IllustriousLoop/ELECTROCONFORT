@@ -33,8 +33,7 @@ interface Props {
   sum: number;
 }
 
-const TarjetasCompleto: FC<Props> = ({ allCards, sum }) => {
-  const [selectionModel, setSelectionModel] = useState([]);
+const AllCards: FC<Props> = ({ allCards, sum }) => {
 
   return (
     <DataGridPro
@@ -47,13 +46,9 @@ const TarjetasCompleto: FC<Props> = ({ allCards, sum }) => {
         footer: { sum },
       }}
       rowHeight={28}
-      // onSelectionModelChange={(newSelectionModel) => {
-      // setSelectionModel(newSelectionModel);
-      // }}
-      // selectionModel={selectionModel}
       disableSelectionOnClick
     />
   );
 };
 
-export default TarjetasCompleto;
+export default AllCards;

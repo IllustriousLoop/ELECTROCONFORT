@@ -2,8 +2,8 @@ import type { NextPage, GetServerSideProps } from "next";
 import axios from "axios";
 import GetSiigoAuxiliary from "../../../ts/types/siigo/getAuxiliary.types";
 import GetBankStatement from "../../../ts/types/bank/getStatement.types";
-import Auxiliar from "../../../components/conciliacion/Auxiliar";
-import Extracto from "../../../components/conciliacion/Extracto";
+import Auxiliary from "../../../components/reconciliation/Auxiliary";
+import Statement from "../../../components/reconciliation/Statement";
 
 interface Props {
   auxiliary: GetSiigoAuxiliary;
@@ -14,8 +14,8 @@ interface Props {
 const ReconciliationByMonth: NextPage<Props> = (props) => {
   return (
     <>
-      <Extracto {...props} />
-      <Auxiliar {...props} />
+      <Statement {...props} />
+      <Auxiliary {...props} />
     </>
   );
 };
