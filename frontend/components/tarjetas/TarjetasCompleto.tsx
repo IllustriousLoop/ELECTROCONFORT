@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { FC, useState } from "react";
 import { DataGridPro } from "@mui/x-data-grid-pro";
 import { GridToolbar } from "@mui/x-data-grid";
-import { columnsTarjetasCompleto } from "../../utils/apiContext";
+import { columnsAllCards } from "../../utils/apiContext";
 import { Grid, Typography, Box } from "@mui/material";
+import GetAllCards from "../../ts/types/bank/getAllCards";
 
-const Toolbar = () => {
+const customToolbar = () => {
   return (
     <Grid container spacing={3}>
       <Grid item xs={2}>
@@ -18,35 +19,38 @@ const Toolbar = () => {
     </Grid>
   );
 };
-function numberWithCommas(x) {
-  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-}
-function CustomFooterStatusComponent(props) {
+
+function customFooter({ sum }: { sum: number }) {
+  const numberWithCommas = (x: number) =>
+    x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
   return (
-    <Box sx={{ p: 1, display: "flex" }}>
-      Total {numberWithCommas(props.sum)}
-    </Box>
+    <Box sx={{ p: 1, display: "flex" }}>Total {numberWithCommas(sum)}</Box>
   );
 }
+interface Props {
+  allCards: GetAllCards;
+  sum: number;
+}
 
-const TarjetasCompleto = (props) => {
+const TarjetasCompleto: FC<Props> = ({ allCards, sum }) => {
   const [selectionModel, setSelectionModel] = useState([]);
 
   return (
     <DataGridPro
-      rows={props.data}
-      columns={columnsTarjetasCompleto}
+      rows={allCards}
+      columns={columnsAllCards}
       density="compact"
-      // loading={aux.length === 0}
-      components={{ Toolbar: Toolbar, Footer: CustomFooterStatusComponent }}
+      loading={allCards.length === 0}
+      components={{ Toolbar: customToolbar, Footer: customFooter }}
       componentsProps={{
-        footer: { sum: props.sum },
+        footer: { sum },
       }}
       rowHeight={28}
-      onSelectionModelChange={(newSelectionModel) => {
-        setSelectionModel(newSelectionModel);
-      }}
-      selectionModel={selectionModel}
+      // onSelectionModelChange={(newSelectionModel) => {
+      // setSelectionModel(newSelectionModel);
+      // }}
+      // selectionModel={selectionModel}
       disableSelectionOnClick
     />
   );

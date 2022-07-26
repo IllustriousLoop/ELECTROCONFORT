@@ -1,12 +1,31 @@
-import axios from "axios";
-import { useState, useEffect } from "react";
-import { apiUrl, columnsExtracto, conciliacion } from "../../utils/apiContext";
+import { FC, useState } from "react";
+import { columnsStatement } from "../../utils/apiContext";
 import { DataGridPro } from "@mui/x-data-grid-pro";
 import { GridToolbar } from "@mui/x-data-grid";
 import { Box, Button, Alert } from "@mui/material";
+import axios from "axios";
+import GetBankStatement from "../../ts/types/bank/getStatement.types";
 
-const Extracto = ({ extracto, month, apiUrl }) => {
+interface Props {
+  statement: GetBankStatement;
+  month: number;
+}
+
+const Extracto: FC<Props> = ({ statement, month }) => {
   const [pageSize, setPageSize] = useState(200);
+
+  const reconciliationData = async () => {
+    const { data } = await axios.post(
+      "/api/bank/set/reconciliation",
+      JSON.stringify({ statement, month }),
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    console.log(data);
+  };
 
   return (
     <>
@@ -22,7 +41,7 @@ const Extracto = ({ extracto, month, apiUrl }) => {
         <Button
           variant="contained"
           color="primary"
-          onClick={() => conciliacion(apiUrl, extracto, month)}
+          onClick={() => reconciliationData()}
         >
           Conciliar Extracto
         </Button>
@@ -32,9 +51,9 @@ const Extracto = ({ extracto, month, apiUrl }) => {
       </Box>
       <Box sx={{ height: "90vh", width: "100%" }}>
         <DataGridPro
-          rows={extracto}
-          columns={columnsExtracto}
-          loading={extracto.length === 0}
+          rows={statement}
+          columns={columnsStatement}
+          loading={statement.length === 0}
           components={{ Toolbar: GridToolbar }}
           rowHeight={28}
           pageSize={pageSize}

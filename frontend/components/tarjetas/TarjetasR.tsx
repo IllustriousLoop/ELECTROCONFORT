@@ -1,20 +1,27 @@
-import React from "react";
+import React, { FC } from "react";
 import { DataGridPro } from "@mui/x-data-grid-pro";
 import { GridToolbar } from "@mui/x-data-grid";
-import { columnsTarjetasR } from "../../utils/apiContext";
+import { columnsSummaryCards } from "../../utils/apiContext";
+import GetSummaryCards from "../../ts/types/bank/getSummaryCards.types";
 
-const TarjetasR = (props) => {
+interface Props {
+  summaryCards: GetSummaryCards;
+  selection: [];
+  setSelection: React.Dispatch<React.SetStateAction<[]>>;
+}
+
+const TarjetasR: FC<Props> = ({ summaryCards, ...props }) => {
   return (
     <DataGridPro
-      rows={props.data}
-      columns={columnsTarjetasR}
-      loading={props.data.length === 0}
+      rows={summaryCards}
+      columns={columnsSummaryCards}
+      loading={summaryCards.length === 0}
       components={{ Toolbar: GridToolbar }}
       rowHeight={28}
-      onSelectionModelChange={(newSelectionModel) =>
-        props.setSelectionModel(newSelectionModel)
+      onSelectionModelChange={(newSelection: any) =>
+        props.setSelection(newSelection)
       }
-      selectionModel={props.selectionModel}
+      selectionModel={props.selection}
       disableMultipleSelection={true}
     />
   );

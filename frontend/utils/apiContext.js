@@ -1,24 +1,7 @@
-import axios from "axios";
-
-let apiUrl = "http://localhost:8000/api";
-
 export const dateNormalizer = (params, name) =>
   params.row[name] ? new Date(params.row[name]).toLocaleDateString() : "";
 
-export const fechaJavascript = (params, name) =>
-  params[name] ? new Date(params[name]).getTime() : "";
-
-export const arrayTodosLosDiasDeUnMes = (mes, año) => {
-  const dias = new Date(año, mes, 0).getDate();
-  const diasDelMes = [];
-  for (let i = 1; i <= dias; i++) {
-    diasDelMes.push(new Date(año, mes - 1, i));
-  }
-  console.log(diasDelMes);
-  return diasDelMes;
-};
-
-export const columnsTarjetasR = [
+export const columnsSummaryCards = [
   { field: "id", headerName: "ID", width: 90, hide: true },
   {
     field: "Codigo  establec",
@@ -130,7 +113,7 @@ export const columnsTarjetasR = [
   },
 ];
 
-export const columnsTarjetasCompleto = [
+export const columnsAllCards = [
   { field: "id", headerName: "ID", width: 90, hide: true },
   { field: "Comercio", type: "number", headerName: "Terminal", width: 120 },
   { field: "Franquicia", type: "string", headerName: "Franquicia", width: 150 },
@@ -260,7 +243,7 @@ export const columnsTarjetasCompleto = [
   },
 ];
 
-export const columnsAuxiliar = [
+export const columnsAuxiliary = [
   { field: "id", headerName: "ID", width: 90, hide: true },
   {
     field: "COMPROBANTE",
@@ -293,7 +276,7 @@ export const columnsAuxiliar = [
   },
   { field: "TERMINAL", headerName: "Terminal", width: 150 },
 ];
-export const columnsExtracto = [
+export const columnsStatement = [
   { field: "id", headerName: "ID", width: 90, hide: true },
   {
     field: "FECHA",
@@ -313,267 +296,3 @@ export const columnsExtracto = [
   { field: "CREDITO", headerName: "Credito", width: 150, type: "number" },
   { field: "TIPO", headerName: "Tipo", width: 150, type: "string" },
 ];
-
-const terminales = [15969009, 15969017, 15969066, 15969082, 15969090];
-const franquicias = ["DCN", "MNS", "VNS"];
-const transacciones = [6, 26, 420, 78];
-
-export const findAsociados = (api,ext = [], month = 1) => {
-  const mes = arrayTodosLosDiasDeUnMes(month, 2022);
-  terminales.forEach((terminal) => {
-    const filtTer = ext.filter(
-      (extracto) => extracto["Codigo  establec"] === terminal
-    );
-    franquicias.forEach((franquicia) => {
-      const filtFran = filtTer.filter(
-        (extracto) => extracto["Franquicia"] === franquicia
-      );
-      mes.forEach((dia) => {
-        const filtDia = filtFran.filter(
-          (extracto) =>
-            fechaJavascript(extracto, "Fecha de Abono") === dia.getTime()
-        );
-        transacciones.forEach((transaccion) => {
-          const filtTrans = filtDia.filter(
-            (extracto) => extracto["Tipo Transaccion"] === transaccion
-          );
-
-          filtTrans.forEach((extracto) => {
-            axios
-              .get(
-                `${api}/tarjetascompleto/specific/${terminal}/${franquicia}/${dia.getTime()}/${transaccion}/?MES=${month}`
-              )
-              .then((res) => {
-                const data = res.data;
-
-                let suma = 0;
-                if (data.length === 1) {
-                  suma = res.data[0]["Vlr Abono"];
-                } else {
-                  data.forEach((auxiliar) => (suma += auxiliar["Vlr Abono"]));
-                }
-                if (suma !== extracto["Valor Abono"]) {
-                  console.log(
-                    "Error en :",
-                    `${terminal}-${franquicia}-${dia.toLocaleDateString()}-${transaccion} con:`,
-                    extracto,
-                    data,
-                    "y",
-                    suma
-                  );
-                } else {
-                  let ids = [];
-                  data.forEach((ex) => {
-                    ids.push(ex["id"]);
-                  });
-                  axios
-                    .put(`${api}/tarjetasr/${extracto.id}?MES=${mes}`, {
-                      asociado: ids,
-                    })
-                    .then((res) => {
-                      console.log("Exitoso");
-                    })
-                    .catch((err) => {
-                      console.log(err);
-                    });
-                }
-              })
-              .catch((err) => {
-                console.log(err);
-              });
-          });
-        });
-      });
-    });
-  });
-  console.log("Terminado");
-};
-
-const gastosBancarios = (data, mes) => {
-  const h = data.filter(
-    (row) =>
-      row["DESCRIPCION"].startsWith("Cobro ") ||
-      row["DESCRIPCION"].includes("Gravamen ") ||
-      (row["DESCRIPCION"].includes("IVA ") && row["CREDITO"] === 0)
-  );
-  console.log(h);
-  h.forEach((row) => {
-    axios
-      .put(`${apiUrl}/extracto/${row.id}/?MES=${mes}`, {
-        TIPO: ["gasto"],
-      })
-      .then((res) => {
-        console.log("Exitoso");
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  });
-  return h;
-};
-
-const tarjetas = (data, mes) => {
-  const h = data.filter(
-    (row) =>
-      row["DESCRIPCION"].startsWith("Nc Master") ||
-      row["DESCRIPCION"].startsWith("Nd Master") ||
-      row["DESCRIPCION"].startsWith("Nc Visa") ||
-      row["DESCRIPCION"].startsWith("Nd Visa") ||
-      row["DESCRIPCION"].startsWith("Nc Diners") ||
-      row["DESCRIPCION"].startsWith("Nc Diners")
-  );
-
-  h.forEach((row) => {
-    axios
-      .put(`${apiUrl}/extracto/${row.id}/?MES=${mes}`, {
-        TIPO: "tarjeta",
-      })
-      .then((res) => {
-        console.log("Exitoso");
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  });
-  return h;
-};
-const creditos = (data, mes) => {
-  const h = data.filter(
-    (row) => row["DEBITO"] !== 0 && row["TIPO"].length === 0
-  );
-  console.log("inicio");
-  axios
-    .get(`${apiUrl}/auxiliar/all/CREDITOS/?MES=${mes}`)
-    .then((res) => {
-      const dataAux = res.data;
-      h.forEach((ext) => {
-        dataAux.forEach((aux) => {
-          if (ext["DEBITO"] === aux["CREDITOS"]) {
-            axios
-              .put(`${apiUrl}/extracto/${ext.id}/?MES=${mes}`, {
-                TIPO: "credito",
-                // asociado: aux.id,
-              })
-              .then(() => {
-                console.log("asociado", ext["DEBITO"], aux["CREDITOS"], ext.id);
-              })
-              .catch((err) => {
-                console.log(ext.id, aux.id, err);
-              });
-          }
-        });
-      });
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-};
-
-function addDays(date, days) {
-  var result = new Date(date);
-  result.setDate(result.getDate() + days);
-  return result;
-}
-
-const removeDays = (date, days) => {
-  var result = new Date(date);
-  result.setDate(result.getDate() - days);
-  return result;
-};
-
-const debitos = (data, mes) => {
-  const h = data.filter(
-    (row) => row["CREDITO"] !== 0 && row["TIPO"].length === 0
-  );
-  console.log("inicio debitos");
-  axios
-    .get(`${apiUrl}/auxiliar/all/DEBITOS/?MES=${mes}`)
-    .then((res) => {
-      const dataAux = res.data;
-      h.forEach((ext) => {
-        dataAux.forEach((aux) => {
-          const updateExtract = () => {
-            axios
-              .put(`${apiUrl}/extracto/${ext.id}/?MES=${mes}`, {
-                TIPO: "debitos",
-                // asociado: aux.id,
-              })
-              .then(() => {
-                console.log("update", ext["CREDITO"], aux["DEBITOS"], ext.id);
-              })
-              .catch((err) => {
-                console.log(ext.id, aux.id, err);
-              });
-          };
-          if (
-            ext["CREDITO"] === aux["DEBITOS"] &&
-            ext["FECHA"] === aux["FECHA"]
-          ) {
-            updateExtract();
-          }
-          if (
-            ext["CREDITO"] === aux["DEBITOS"] &&
-            new Date(ext["FECHA"]).getTime() ===
-              addDays(aux["FECHA"], 1).getTime()
-          ) {
-            updateExtract();
-          } else if (
-            ext["CREDITO"] === aux["DEBITOS"] &&
-            addDays(ext["FECHA"], 1).getTime() ==
-              new Date(aux["FECHA"]).getTime()
-          ) {
-            updateExtract();
-          } else if (
-            ext["CREDITO"] === aux["DEBITOS"] &&
-            new Date(ext["FECHA"]).getTime() ===
-              removeDays(aux["FECHA"], 1).getTime()
-          ) {
-            updateExtract();
-          } else if (
-            ext["CREDITO"] === aux["DEBITOS"] &&
-            removeDays(ext["FECHA"], 1).getTime() ==
-              new Date(aux["FECHA"]).getTime()
-          ) {
-            updateExtract();
-          }
-
-          if (
-            ext["CREDITO"] === aux["DEBITOS"] &&
-            new Date(ext["FECHA"]).getTime() ===
-              addDays(aux["FECHA"], 2).getTime()
-          ) {
-            updateExtract();
-          } else if (
-            ext["CREDITO"] === aux["DEBITOS"] &&
-            addDays(ext["FECHA"], 2).getTime() ==
-              new Date(aux["FECHA"]).getTime()
-          ) {
-            updateExtract();
-          } else if (
-            ext["CREDITO"] === aux["DEBITOS"] &&
-            new Date(ext["FECHA"]).getTime() ===
-              removeDays(aux["FECHA"], 2).getTime()
-          ) {
-            updateExtract();
-          } else if (
-            ext["CREDITO"] === aux["DEBITOS"] &&
-            removeDays(ext["FECHA"], 2).getTime() ==
-              new Date(aux["FECHA"]).getTime()
-          ) {
-            updateExtract();
-          }
-        });
-      });
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-};
-
-export const conciliacion = (api, data, mes) => {
-  apiUrl = api;
-  gastosBancarios(data, mes);
-  tarjetas(data, mes);
-  creditos(data, mes);
-  debitos(data, mes);
-};

@@ -1,6 +1,7 @@
 import type { AppProps } from "next/app";
 import { LicenseInfo } from "@mui/x-data-grid-pro";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
+import Main from "../components/layout/Main";
 
 const darkTheme = createTheme({
   palette: {
@@ -15,7 +16,9 @@ LicenseInfo.setLicenseKey(
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <ThemeProvider theme={darkTheme}>
-      <Component {...pageProps} />
+      <Main>
+        <Component {...pageProps} />
+      </Main>
     </ThemeProvider>
   );
 }

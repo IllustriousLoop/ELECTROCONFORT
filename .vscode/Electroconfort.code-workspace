@@ -7,10 +7,11 @@
     {
       "name": "Frontend",
       "path": "../frontend"
-    },
-    {
-      "name": "Main",
-      "path": "../"
-    },
-  ]
+    }
+  ],
+  "settings": {
+    "cSpell.words": [
+      "Siigo"
+    ]
+  }
 }
