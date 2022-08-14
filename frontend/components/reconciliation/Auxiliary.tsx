@@ -8,7 +8,9 @@ interface Props {
 }
 
 const Auxiliary: FC<Props> = ({ auxiliary }) => {
-  return <CustomTable data={auxiliary} columns={columnsAuxiliary} />;
+  return (
+    <CustomTable data={auxiliary} columns={columnsAuxiliary} loading={false} />
+  );
 };
 
 export default Auxiliary;

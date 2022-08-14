@@ -8,7 +8,13 @@ interface Props {
 }
 
 const SummaryCards: FC<Props> = ({ summaryCards }) => {
-  return <CustomTable data={summaryCards} columns={columnsSummaryCards} />;
+  return (
+    <CustomTable
+      data={summaryCards}
+      columns={columnsSummaryCards}
+      loading={false}
+    />
+  );
 };
 
 export default SummaryCards;

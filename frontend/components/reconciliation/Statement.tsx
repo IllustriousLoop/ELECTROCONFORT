@@ -36,7 +36,11 @@ const Statement: FC<Props> = ({ statement, month }) => {
           <Alert type="error" message="Debitos revision manual" />
         </Col>
       </Row>
-      <CustomTable data={statement} columns={columnsStatement} />
+      <CustomTable
+        data={statement}
+        columns={columnsStatement}
+        loading={false}
+      />
     </>
   );
 };

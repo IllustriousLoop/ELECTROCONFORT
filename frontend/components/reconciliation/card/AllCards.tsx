@@ -21,7 +21,7 @@ const useFetchData = (id: string) => {
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
-      toast.info("Please wait...", {
+      toast.info("Trayendo Asociados", {
         toastId: id,
         autoClose: false,
         closeButton: false,
@@ -39,7 +39,7 @@ const useFetchData = (id: string) => {
         );
         setData(response);
         toast.update(id, {
-          render: "All is good",
+          render: `Listo se encontraron ${response.cards.length} Asociados`,
           type: "success",
           autoClose: 2000,
           closeButton: true,
@@ -47,7 +47,7 @@ const useFetchData = (id: string) => {
         });
       } catch (error) {
         toast.update(id, {
-          render: "All is not well",
+          render: "Ups, no se pudo obtener los asociados",
           type: "error",
           autoClose: 2000,
           closeButton: true,
@@ -57,7 +57,7 @@ const useFetchData = (id: string) => {
       setLoading(false);
     };
     fetchData();
-  }, []);
+  }, [id, month]);
 
   return {
     data: data?.cards,
@@ -67,7 +67,9 @@ const useFetchData = (id: string) => {
 
 const AllCards: FC<Props> = ({ id }) => {
   const { data, loading } = useFetchData(id);
-  return <CustomTable data={data} columns={columnsAllCards} loading={loading}/>;
+  return (
+    <CustomTable data={data} columns={columnsAllCards} loading={loading} />
+  );
 };
 
 export default AllCards;
