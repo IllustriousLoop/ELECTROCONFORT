@@ -4,15 +4,12 @@ import GetSummaryCards, {
 } from "../../../ts/types/bank/getSummaryCards.types";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import AllCards from "../../../components/reconciliation/card/AllCards";
 import SummaryCards from "../../../components/reconciliation/card/SummaryCards";
-import { Button, Col, Row, Switch } from "antd";
-import GetAssociatedCards from "../../../ts/types/bank/getAssociatedCards";
-import { AllCardsData } from "../../../ts/types/bank/getAllCards";
+import { Button, Col, Row } from "antd";
+import { useRouter } from "next/router";
 
 interface Props {
   summaryCards: SummaryCardsData;
-  month: number;
 }
 
 const findAssociateValues = async (
@@ -33,92 +30,37 @@ const findAssociateValues = async (
   }
 };
 
-const ReconciliationByMonth: NextPage<Props> = ({ summaryCards, month }) => {
-  const [allCards, setAllCards] = useState<AllCardsData>([]);
-  const [associated, setAssociated] = useState(true);
+const ReconciliationByMonth: NextPage<Props> = ({ summaryCards }) => {
   const [view, setView] = useState(false);
-  const [selection, setSelection] = useState<React.Key[]>([]);
-  const [sum, setSum] = useState<number>(0);
-
-  const handleChange = (checked: boolean) => setAssociated(checked);
+  const router = useRouter();
 
   useEffect(() => {
-    if (summaryCards[0]["asociado"]?.length === 0) {
-      setView(false);
-      setAssociated(false);
-    } else setView(true);
-
-    if (!associated) {
-      axios
-        .get<AllCardsData>(`/api/bank/allCards/?month=${month}`)
-        .then((res) => {
-          setAllCards(res.data);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    } else setAllCards([]);
-  }, [associated]);
-
-  useEffect(() => {
-    if (selection.length > 0 && associated) {
-      (async () => {
-        const {
-          data: { cards, sum },
-        } = await axios.post<GetAssociatedCards>(
-          `/api/bank/associated`,
-          JSON.stringify({
-            id: selection[0],
-            month: month,
-          }),
-          {
-            headers: { "Content-Type": "application/json" },
-          }
-        );
-        setAllCards(cards);
-        setSum(sum);
-      })();
-    }
-  }, [selection]);
-
-  const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
-    console.log("selectedRowKeys changed: ", selection);
-    setSelection(newSelectedRowKeys);
-  };
-
-  const rowSelection = {
-    selectedRowKeys: selection,
-    onChange: onSelectChange,
-  };
+    if (summaryCards[0]["asociado"].length === 0) setView(false);
+    else setView(true);
+  }, [summaryCards]);
 
   return (
     <>
-      <div style={{ height: "10vh", width: "100%" }}>
-        {view ? (
-          <Switch
-            checked={associated}
-            onChange={handleChange}
-            checkedChildren="Asociando"
-            unCheckedChildren="Revision"
-          />
-        ) : (
+      {view ? null : (
+        <div style={{ height: "10vh", width: "100%" }}>
           <Button
             type="primary"
-            onClick={() => findAssociateValues(summaryCards, month)}
+            onClick={() =>
+              findAssociateValues(summaryCards, Number(router.query.month))
+            }
           >
             Buscar Asociados
           </Button>
-        )}
-      </div>
+        </div>
+      )}
+
       <Row>
         <Col span={24}>
-          <SummaryCards summaryCards={summaryCards} selection={rowSelection} />
+          <SummaryCards summaryCards={summaryCards} />
         </Col>
       </Row>
       <Row>
-        <Col span={24}>
-          <AllCards allCards={allCards} sum={sum} />
-        </Col>
+        <Col span={24}>{/**/}</Col>
       </Row>
     </>
   );
@@ -142,7 +84,6 @@ export const getServerSideProps: GetServerSideProps<Props> = async (
   return {
     props: {
       summaryCards,
-      month: Number(month),
     },
   };
 };

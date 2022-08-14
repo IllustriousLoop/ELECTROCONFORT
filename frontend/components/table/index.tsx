@@ -5,27 +5,28 @@ import { AllCardsData } from "../../ts/types/bank/getAllCards";
 import { BankStatementData } from "../../ts/types/bank/getStatement.types";
 import { SummaryCardsData } from "../../ts/types/bank/getSummaryCards.types";
 import { AuxiliaryData } from "../../ts/types/siigo/getAuxiliary.types";
+import AllCards from "../reconciliation/card/AllCards";
 
 interface Props {
-  data: SummaryCardsData | AllCardsData | AuxiliaryData | BankStatementData;
+  data:
+    | SummaryCardsData
+    | AllCardsData
+    | AuxiliaryData
+    | BankStatementData
+    | undefined;
   columns: ColumnsType<any>;
-  selection?: {
-    selectedRowKeys: React.Key[];
-    onChange: (newSelectedRowKeys: React.Key[]) => void;
-  };
 }
 
-const CustomTable = ({ data, columns, selection }: Props) => {
+const CustomTable = ({ data, columns }: Props) => {
+
   return (
     <Table
       dataSource={data}
       columns={columns}
-      rowSelection={
-        selection && {
-          type: "radio",
-          ...selection,
-        }
-      }
+      expandable={{
+        expandedRowRender: (record) => <AllCards id={record.id} />,
+        rowExpandable: (record) => record["asociado"]?.length > 0,
+      }}
     />
   );
 };
