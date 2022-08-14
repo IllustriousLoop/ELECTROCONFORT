@@ -15,10 +15,10 @@ interface Props {
     | BankStatementData
     | undefined;
   columns: ColumnsType<any>;
+  loading: boolean;
 }
 
-const CustomTable = ({ data, columns }: Props) => {
-
+const CustomTable = ({ data, columns, loading }: Props) => {
   return (
     <Table
       dataSource={data}
@@ -27,6 +27,7 @@ const CustomTable = ({ data, columns }: Props) => {
         expandedRowRender: (record) => <AllCards id={record.id} />,
         rowExpandable: (record) => record["asociado"]?.length > 0,
       }}
+      loading={loading}
     />
   );
 };
