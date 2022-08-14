@@ -4,8 +4,8 @@ import GetSummaryCards, {
 } from "../../../ts/types/bank/getSummaryCards.types";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import AllCards from "../../../components/card/AllCards";
-import SummaryCards from "../../../components/card/SummaryCards";
+import AllCards from "../../../components/reconciliation/card/AllCards";
+import SummaryCards from "../../../components/reconciliation/card/SummaryCards";
 import { Button, Col, Row, Switch } from "antd";
 
 interface Props {

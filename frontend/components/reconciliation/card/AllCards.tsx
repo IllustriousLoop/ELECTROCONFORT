@@ -1,7 +1,7 @@
 import { FC } from "react";
-import { AllCardsData } from "../../ts/types/bank/getAllCards";
-import { columnsAllCards } from "../../utils";
-import CustomTable from "../table";
+import { AllCardsData } from "../../../ts/types/bank/getAllCards";
+import { columnsAllCards } from "../../../utils";
+import CustomTable from "../../table";
 
 interface Props {
   allCards: AllCardsData;

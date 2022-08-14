@@ -1,8 +1,8 @@
 import React, { FC } from "react";
-import CustomTable from "../table";
-import { columnsSummaryCards } from "../../utils";
+import CustomTable from "../../table";
+import { columnsSummaryCards } from "../../../utils";
 
-import type { SummaryCardsData } from "../../ts/types/bank/getSummaryCards.types";
+import type { SummaryCardsData } from "../../../ts/types/bank/getSummaryCards.types";
 
 interface Props {
   summaryCards: SummaryCardsData;
