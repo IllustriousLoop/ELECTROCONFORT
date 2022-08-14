@@ -1,8 +1,8 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import GetAllCards from "./getAllCards";
+import { AllCardsData } from "./getAllCards";
 
 type GetAssociatedCards = {
-  cards: GetAllCards;
+  cards: AllCardsData;
   sum: number;
 };
 

@@ -7,6 +7,8 @@ import { useEffect, useState } from "react";
 import AllCards from "../../../components/reconciliation/card/AllCards";
 import SummaryCards from "../../../components/reconciliation/card/SummaryCards";
 import { Button, Col, Row, Switch } from "antd";
+import GetAssociatedCards from "../../../ts/types/bank/getAssociatedCards";
+import { AllCardsData } from "../../../ts/types/bank/getAllCards";
 
 interface Props {
   summaryCards: SummaryCardsData;
@@ -32,7 +34,7 @@ const findAssociateValues = async (
 };
 
 const ReconciliationByMonth: NextPage<Props> = ({ summaryCards, month }) => {
-  const [allCards, setAllCards] = useState([]);
+  const [allCards, setAllCards] = useState<AllCardsData>([]);
   const [associated, setAssociated] = useState(true);
   const [view, setView] = useState(false);
   const [selection, setSelection] = useState<React.Key[]>([]);
@@ -48,7 +50,7 @@ const ReconciliationByMonth: NextPage<Props> = ({ summaryCards, month }) => {
 
     if (!associated) {
       axios
-        .get(`/api/bank/allCards/?month=${month}`)
+        .get<AllCardsData>(`/api/bank/allCards/?month=${month}`)
         .then((res) => {
           setAllCards(res.data);
         })
@@ -63,7 +65,7 @@ const ReconciliationByMonth: NextPage<Props> = ({ summaryCards, month }) => {
       (async () => {
         const {
           data: { cards, sum },
-        } = await axios.post(
+        } = await axios.post<GetAssociatedCards>(
           `/api/bank/associated`,
           JSON.stringify({
             id: selection[0],

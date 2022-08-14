@@ -1,7 +1,7 @@
 import axios from "axios";
-import type allCard from "../../../ts/interfaces/bank/allCards.interfaces";
 import type summaryCard from "../../../ts/interfaces/bank/summaryCards.interfaces";
 import type GetAllCards from "../../../ts/types/bank/getAllCards";
+import type { AllCardsData } from "../../../ts/types/bank/getAllCards";
 import { HandlerGetAssociatedCards } from "../../../ts/types/bank/getAssociatedCards";
 
 const handlerGetAssociatedCards: HandlerGetAssociatedCards = async (
@@ -12,14 +12,14 @@ const handlerGetAssociatedCards: HandlerGetAssociatedCards = async (
 
   const { id, month } = req.body;
   let sum: number = 0;
-  let cards = <GetAllCards>[];
+  const cards: AllCardsData = [];
 
   try {
     const card = await axios.get<summaryCard>(
       `${apiUrl}/tarjetasr/${id}/?MES=${month}`
     );
 
-    const { data } = await axios.post<GetAllCards>(
+    const response = await axios.post<GetAllCards>(
       `${apiUrl}/tarjetascompleto/ids/?MES=${month}`,
       JSON.stringify(card.data["asociado"]),
       {
@@ -27,9 +27,11 @@ const handlerGetAssociatedCards: HandlerGetAssociatedCards = async (
       }
     );
 
-    data.forEach((e: allCard) => (sum += e["Vlr Abono"]));
+    response.data.forEach((item) => {
+      cards.push({ key: item.id, ...item });
+      sum += item["Vlr Abono"];
+    });
 
-    cards = data;
   } catch (e: any) {
     console.log(e.message);
   }
