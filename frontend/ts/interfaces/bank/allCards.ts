@@ -24,3 +24,6 @@ export default interface allCard {
   "Vlr Abono": number;
   "T Tarjeta": number;
 }
+export type allCardData = {
+  key: string;
+} & allCard;

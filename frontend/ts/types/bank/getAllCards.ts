@@ -1,11 +1,12 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import allCard from "../../interfaces/bank/allCards";
+import allCard, { allCardData } from "../../interfaces/bank/allCards";
 
 type GetAllCards = allCard[];
+export type AllCardsData = allCardData[];
 
 export type HandlerGetAllCards = (
   req: NextApiRequest,
-  res: NextApiResponse<GetAllCards>
-) => Promise<GetAllCards | void>;
+  res: NextApiResponse<AllCardsData>
+) => Promise<AllCardsData | void>;
 
 export default GetAllCards;

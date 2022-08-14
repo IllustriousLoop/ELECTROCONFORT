@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, TextField } from "@mui/material/";
+import { Button, Input } from "antd";
 import { useState } from "react";
 import Link from "next/link";
 
@@ -8,23 +8,21 @@ const Reconciliation = () => {
 
   return (
     <div>
-      <TextField
-        label="Numero de mes"
-        variant="filled"
+      <Input.Group compact>
+        <Input
+          style={{ width: "calc(100% - 400px)" }}
+          placeholder="Numero de mes"
         type="number"
         value={month}
         onChange={(e: any) => setMonth(e.target.value)}
       />
       <Link href={`/reconciliation/statement&auxiliary/${month}`}>
-        <Button variant="contained" color="primary">
-          Extrcto y auxiliar
-        </Button>
+          <Button type="primary">Extrcto y auxiliar</Button>
       </Link>
       <Link href={`/reconciliation/bankCards/${month}`}>
-        <Button variant="contained" color="secondary">
-          Tarjetas
-        </Button>
+          <Button type="primary">Tarjetas</Button>
       </Link>
+      </Input.Group>
     </div>
   );
 };

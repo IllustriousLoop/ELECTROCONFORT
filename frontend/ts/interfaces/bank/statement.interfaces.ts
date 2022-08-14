@@ -8,3 +8,6 @@ export default interface statement {
   CREDITO: number;
   TIPO: string[];
 }
+export type statementData = {
+  key: string;
+} & statement;

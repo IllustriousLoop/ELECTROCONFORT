@@ -1,21 +1,30 @@
 import type { NextPage, GetServerSideProps } from "next";
 import axios from "axios";
-import GetSiigoAuxiliary from "../../../ts/types/siigo/getAuxiliary.types";
-import GetBankStatement from "../../../ts/types/bank/getStatement.types";
+import { AuxiliaryData } from "../../../ts/types/siigo/getAuxiliary.types";
+import { BankStatementData } from "../../../ts/types/bank/getStatement.types";
 import Auxiliary from "../../../components/reconciliation/Auxiliary";
 import Statement from "../../../components/reconciliation/Statement";
+import { Col, Row } from "antd";
 
 interface Props {
-  auxiliary: GetSiigoAuxiliary;
-  statement: GetBankStatement;
+  auxiliary: AuxiliaryData;
+  statement: BankStatementData;
   month: number;
 }
 
 const ReconciliationByMonth: NextPage<Props> = (props) => {
   return (
     <>
-      <Statement {...props} />
-      <Auxiliary {...props} />
+      <Row>
+        <Col span={24}>
+          <Statement {...props} />
+        </Col>
+      </Row>
+      <Row>
+        <Col span={24}>
+          <Auxiliary {...props} />
+        </Col>
+      </Row>
     </>
   );
 };
@@ -25,10 +34,10 @@ export const getServerSideProps: GetServerSideProps<Props> = async (
 ) => {
   const { month } = context.query;
 
-  const statement = await axios.get<GetBankStatement>(
+  const statement = await axios.get<BankStatementData>(
     "/api/bank/statement?month=" + month
   );
-  const auxiliary = await axios.get<GetSiigoAuxiliary>(
+  const auxiliary = await axios.get<AuxiliaryData>(
     `/api/siigo/auxiliary/?month=${month}`
   );
 

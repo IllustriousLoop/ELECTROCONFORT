@@ -10,3 +10,6 @@ export default interface auxiliary {
   "FECHA VAOUCHER": string;
   TERMINAL: number;
 }
+export type auxiliaryData = {
+  key: string;
+} & auxiliary;

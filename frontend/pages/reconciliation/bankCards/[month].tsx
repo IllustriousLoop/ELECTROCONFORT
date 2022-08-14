@@ -1,19 +1,15 @@
 import type { NextPage, GetServerSideProps } from "next";
-import GetSummaryCards from "../../../ts/types/bank/getSummaryCards.types";
+import GetSummaryCards, {
+  SummaryCardsData,
+} from "../../../ts/types/bank/getSummaryCards.types";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import AllCards from "../../../components/card/AllCards";
 import SummaryCards from "../../../components/card/SummaryCards";
-import {
-  Box,
-  Button,
-  FormGroup,
-  FormControlLabel,
-  Switch,
-} from "@mui/material";
+import { Button, Col, Row, Switch } from "antd";
 
 interface Props {
-  summaryCards: GetSummaryCards;
+  summaryCards: SummaryCardsData;
   month: number;
 }
 
@@ -39,10 +35,10 @@ const ReconciliationByMonth: NextPage<Props> = ({ summaryCards, month }) => {
   const [allCards, setAllCards] = useState([]);
   const [associated, setAssociated] = useState(true);
   const [view, setView] = useState(false);
-  const [selection, setSelection] = useState<any>([]);
+  const [selection, setSelection] = useState<React.Key[]>([]);
   const [sum, setSum] = useState<number>(0);
 
-  const handleChange = (event: any) => setAssociated(event.target.checked);
+  const handleChange = (checked: boolean) => setAssociated(checked);
 
   useEffect(() => {
     if (summaryCards[0]["asociado"]?.length === 0) {
@@ -83,38 +79,45 @@ const ReconciliationByMonth: NextPage<Props> = ({ summaryCards, month }) => {
     }
   }, [selection]);
 
+  const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
+    console.log("selectedRowKeys changed: ", selection);
+    setSelection(newSelectedRowKeys);
+  };
+
+  const rowSelection = {
+    selectedRowKeys: selection,
+    onChange: onSelectChange,
+  };
+
   return (
     <>
-      <Box sx={{ height: "10vh", width: "100%" }}>
+      <div style={{ height: "10vh", width: "100%" }}>
         {view ? (
-          <FormGroup>
-            <FormControlLabel
-              control={<Switch checked={associated} onChange={handleChange} />}
-              label="Modo de Asociacion"
-            />
-          </FormGroup>
+          <Switch
+            checked={associated}
+            onChange={handleChange}
+            checkedChildren="Asociando"
+            unCheckedChildren="Revision"
+          />
         ) : (
-          <>
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={() => findAssociateValues(summaryCards, month)}
-            >
-              Buscar Asociados
-            </Button>
-          </>
+          <Button
+            type="primary"
+            onClick={() => findAssociateValues(summaryCards, month)}
+          >
+            Buscar Asociados
+          </Button>
         )}
-      </Box>
-      <Box sx={{ height: "48vh", width: "100%" }}>
-        <SummaryCards
-          summaryCards={summaryCards}
-          selection={selection}
-          setSelection={setSelection}
-        />
-      </Box>
-      <Box sx={{ height: "50vh", width: "100%" }}>
-        <AllCards allCards={allCards} sum={sum} />
-      </Box>
+      </div>
+      <Row>
+        <Col span={24}>
+          <SummaryCards summaryCards={summaryCards} selection={rowSelection} />
+        </Col>
+      </Row>
+      <Row>
+        <Col span={24}>
+          <AllCards allCards={allCards} sum={sum} />
+        </Col>
+      </Row>
     </>
   );
 };
@@ -123,10 +126,10 @@ export const getServerSideProps: GetServerSideProps<Props> = async (
   context
 ) => {
   const { month } = context.query;
-  let summaryCards: GetSummaryCards = [];
+  let summaryCards: SummaryCardsData = [];
 
   try {
-    const res = await axios.get<GetSummaryCards>(
+    const res = await axios.get<SummaryCardsData>(
       `/api/bank/summaryCards/?month=${month}`
     );
     summaryCards = res.data;

@@ -18,3 +18,6 @@ export default interface summaryCard {
   "Valor Abono": number;
   asociado: string[];
 }
+export type summaryCardData = {
+  key: string;
+} & summaryCard;

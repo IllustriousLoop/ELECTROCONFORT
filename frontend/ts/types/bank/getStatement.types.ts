@@ -1,11 +1,14 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import statement from "../../interfaces/bank/statement.interfaces";
+import statement, {
+  statementData,
+} from "../../interfaces/bank/statement.interfaces";
 
 type GetBankStatement = statement[];
+export type BankStatementData = statementData[];
 
 export type HandlerGetBankStatement = (
   req: NextApiRequest,
-  res: NextApiResponse<GetBankStatement>
-) => Promise<GetBankStatement | void>;
+  res: NextApiResponse<BankStatementData>
+) => Promise<BankStatementData | void>;
 
 export default GetBankStatement;

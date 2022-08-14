@@ -1,11 +1,14 @@
-import auxiliary from "../../interfaces/siigo/auxiliary.interfaces";
 import type { NextApiRequest, NextApiResponse } from "next";
+import auxiliary, {
+  auxiliaryData,
+} from "../../interfaces/siigo/auxiliary.interfaces";
 
 type GetSiigoAuxiliary = auxiliary[];
+export type AuxiliaryData = auxiliaryData[];
 
-export type HandlerGetBankAuxiliary = (
+export type HandlerGetSiigoAuxiliary = (
   req: NextApiRequest,
-  res: NextApiResponse<GetSiigoAuxiliary>
-) => Promise<GetSiigoAuxiliary | void>;
+  res: NextApiResponse<AuxiliaryData>
+) => Promise<AuxiliaryData | void>;
 
 export default GetSiigoAuxiliary;

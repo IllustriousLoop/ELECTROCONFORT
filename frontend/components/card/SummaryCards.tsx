@@ -1,30 +1,21 @@
 import React, { FC } from "react";
-import { DataGridPro } from "@mui/x-data-grid-pro";
-import { GridToolbar } from "@mui/x-data-grid";
-import { columnsSummaryCards } from "../../utils/apiContext";
-import GetSummaryCards from "../../ts/types/bank/getSummaryCards.types";
+import CustomTable from "../table";
+import { columnsSummaryCards } from "../../utils";
+
+import type { SummaryCardsData } from "../../ts/types/bank/getSummaryCards.types";
 
 interface Props {
-  summaryCards: GetSummaryCards;
-  selection: [];
-  setSelection: React.Dispatch<React.SetStateAction<[]>>;
+  summaryCards: SummaryCardsData;
+  selection: {
+    selectedRowKeys: React.Key[];
+    onChange: (newSelectedRowKeys: React.Key[]) => void;
+  };
 }
 
-const TarjetasR: FC<Props> = ({ summaryCards, ...props }) => {
+const SummaryCards: FC<Props> = ({ summaryCards, ...props }) => {
   return (
-    <DataGridPro
-      rows={summaryCards}
-      columns={columnsSummaryCards}
-      loading={summaryCards.length === 0}
-      components={{ Toolbar: GridToolbar }}
-      rowHeight={28}
-      onSelectionModelChange={(newSelection: any) =>
-        props.setSelection(newSelection)
-      }
-      selectionModel={props.selection}
-      disableMultipleSelection={true}
-    />
+    <CustomTable data={summaryCards} columns={columnsSummaryCards} {...props} />
   );
 };
 
-export default TarjetasR;
+export default SummaryCards;

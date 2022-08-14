@@ -1,14 +1,14 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import GetAllCards from "./getAllCards";
 
-type returnGetAssociatedCards = {
+type GetAssociatedCards = {
   cards: GetAllCards;
   sum: number;
 };
 
 export type HandlerGetAssociatedCards = (
   req: NextApiRequest,
-  res: NextApiResponse<returnGetAssociatedCards>
-) => Promise<returnGetAssociatedCards | void>;
+  res: NextApiResponse<GetAssociatedCards>
+) => Promise<GetAssociatedCards | void>;
 
-export default returnGetAssociatedCards;
+export default GetAssociatedCards;

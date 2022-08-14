@@ -1,14 +1,21 @@
-import GetBankStatement, {
-  HandlerGetBankAuxiliary,
+import GetSiigoAuxiliary, {
+  AuxiliaryData,
+  HandlerGetSiigoAuxiliary,
 } from "../../../ts/types/siigo/getAuxiliary.types";
 import axios from "axios";
 
-const handlerGetBankStatement: HandlerGetBankAuxiliary = async (req, res) => {
+const handlerGetBankStatement: HandlerGetSiigoAuxiliary = async (req, res) => {
   const apiUrl = process.env.BACKEND_URL;
 
-  const { data } = await axios.get<GetBankStatement>(
+  const response = await axios.get<GetSiigoAuxiliary>(
     `${apiUrl}/extracto/?MES=${req.query.month}`
   );
+
+  const data: AuxiliaryData = [];
+
+  response.data.forEach((item) => {
+    data.push({ key: item.id, ...item });
+  });
 
   res.status(200).json(data);
 };
