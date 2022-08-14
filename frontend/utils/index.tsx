@@ -1,6 +1,6 @@
 import type { ColumnsType } from "antd/es/table";
 import { Tag } from "antd";
-import { allCardData } from "../ts/interfaces/bank/allCards";
+import { allCardData } from "../ts/interfaces/bank/allCards.interfaces";
 import { summaryCardData } from "../ts/interfaces/bank/summaryCards.interfaces";
 import { auxiliaryData } from "../ts/interfaces/siigo/auxiliary.interfaces";
 import { statementData } from "../ts/interfaces/bank/statement.interfaces";

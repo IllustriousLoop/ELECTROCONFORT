@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import allCard, { allCardData } from "../../interfaces/bank/allCards";
+import allCard, { allCardData } from "../../interfaces/bank/allCards.interfaces";
 
 type GetAllCards = allCard[];
 export type AllCardsData = allCardData[];

@@ -1,5 +1,5 @@
 import axios from "axios";
-import allCard from "../../../../ts/interfaces/bank/allCards";
+import allCard from "../../../../ts/interfaces/bank/allCards.interfaces";
 import GetAllCards from "../../../../ts/types/bank/getAllCards";
 import functionAssociateValues, {
   HandlerSetAssociateValues,

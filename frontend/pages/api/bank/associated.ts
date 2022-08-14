@@ -1,5 +1,5 @@
 import axios from "axios";
-import type allCard from "../../../ts/interfaces/bank/allCards";
+import type allCard from "../../../ts/interfaces/bank/allCards.interfaces";
 import type summaryCard from "../../../ts/interfaces/bank/summaryCards.interfaces";
 import type GetAllCards from "../../../ts/types/bank/getAllCards";
 import { HandlerGetAssociatedCards } from "../../../ts/types/bank/getAssociatedCards";
