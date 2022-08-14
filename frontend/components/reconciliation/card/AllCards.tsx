@@ -58,7 +58,7 @@ const useFetchData = (id: string) => {
     };
     fetchData();
   }, []);
-  console.log(data);
+
   return {
     data: data?.cards,
     loading,

@@ -1,19 +1,20 @@
 import type { ColumnsType } from "antd/es/table";
 import type { statementData } from "../../ts/interfaces/bank/statement.interfaces";
 import { Tag } from "antd";
-import { dateNormalizer } from "../functions";
+import dateFilter from "../filters/date";
+import terminalFilter from "../filters/terminal";
 
 const columnsStatement: ColumnsType<statementData> = [
   {
     dataIndex: "FECHA",
     title: "Fecha",
-    render: (text) => dateNormalizer(text),
+    ...dateFilter("FECHA"),
   },
   {
     dataIndex: "DESCRIPCION",
     title: "Descripcion",
   },
-  { dataIndex: "TERMINAL", title: "Terminal" },
+  { dataIndex: "TERMINAL", title: "Terminal", ...terminalFilter("TERMINAL") },
   { dataIndex: "DEBITO", title: "Debito" },
   { dataIndex: "CREDITO", title: "Credito" },
   {

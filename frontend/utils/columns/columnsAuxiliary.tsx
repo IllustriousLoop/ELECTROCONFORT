@@ -1,6 +1,6 @@
 import type { ColumnsType } from "antd/es/table";
 import type { auxiliaryData } from "../../ts/interfaces/siigo/auxiliary.interfaces";
-import { dateNormalizer } from "../functions";
+import dateFilter from "../filters/date";
 
 const columnsAuxiliary: ColumnsType<auxiliaryData> = [
   {
@@ -10,7 +10,7 @@ const columnsAuxiliary: ColumnsType<auxiliaryData> = [
   {
     dataIndex: "FECHA",
     title: "Fecha",
-    render: (text) => dateNormalizer(text),
+    ...dateFilter("FECHA"),
   },
   {
     dataIndex: "DESCRIPCION",
@@ -22,7 +22,7 @@ const columnsAuxiliary: ColumnsType<auxiliaryData> = [
   {
     dataIndex: "FECHA VAOUCHER",
     title: "Fecha Voucher",
-    render: (text) => dateNormalizer(text),
+    ...dateFilter("FECHA VAOUCHER"),
   },
   { dataIndex: "TERMINAL", title: "Terminal" },
 ];

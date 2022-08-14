@@ -1,18 +1,35 @@
 import type { ColumnsType } from "antd/es/table";
 import type { allCardData } from "../../ts/interfaces/bank/allCards.interfaces";
-import { dateNormalizer } from "../functions";
+import dateFilter from "../filters/date";
+import franchiseFilter from "../filters/franchise";
+import terminalFilter from "../filters/terminal";
 
 const columnsAllCards: ColumnsType<allCardData> = [
-  { dataIndex: "Comercio", title: "Terminal" },
-  { dataIndex: "Franquicia", title: "Franquicia" },
+  {
+    dataIndex: "Comercio",
+    title: "Terminal",
+    ...terminalFilter("Comercio"),
+  },
+  {
+    dataIndex: "Franquicia",
+    title: "Franquicia",
+    ...franchiseFilter("Franquicia"),
+  },
+  {
+    dataIndex: "Vlr Total",
+    title: "Vlr Total",
+    sorter: (a, b) => a["Vlr Total"] - b["Vlr Total"],
+  },
   {
     dataIndex: "F vale",
     title: "Fecha de Vale",
-    render: (params) => dateNormalizer(params),
+    ...dateFilter("F vale"),
   },
-  { dataIndex: "Vlr Total", title: "Vlr Total" },
-
-  { dataIndex: "Vlr Abono", title: "Vlr Abono" },
+  {
+    dataIndex: "Vlr Abono",
+    title: "Vlr Abono",
+    sorter: (a, b) => a["Vlr Abono"] - b["Vlr Abono"],
+  },
 ];
 
 /*

@@ -1,26 +1,32 @@
 import type { ColumnsType } from "antd/es/table";
 import { summaryCardData } from "../../ts/interfaces/bank/summaryCards.interfaces";
+import franchiseFilter from "../filters/franchise";
+import terminalFilter from "../filters/terminal";
 
 const columnsSummaryCards: ColumnsType<summaryCardData> = [
   {
     dataIndex: "Codigo  establec",
     key: "Codigo  establec",
     title: "Terminal",
+    ...terminalFilter("Codigo  establec"),
   },
   {
     dataIndex: "Franquicia",
     key: "Franquicia",
     title: "Franquicia",
+    ...franchiseFilter("Franquicia"),
   },
   {
     dataIndex: "Vlr Total",
     key: "Vlr Total",
     title: "Vlr Total",
+    sorter: (a, b) => a["Valor Abono"] - b["Valor Abono"],
   },
   {
     dataIndex: "Valor Abono",
     key: "Valor Abono",
     title: "Valor Abono",
+    sorter: (a, b) => a["Valor Abono"] - b["Valor Abono"],
   },
 ];
 
