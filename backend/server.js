@@ -1,5 +1,8 @@
 const express = require("express");
-const cors = require("cors");
+const fileUpload = require('express-fileupload');
+const cors = require('cors');
+const bodyParser = require('body-parser');
+const morgan = require('morgan');
 
 require("dotenv").config();
 
@@ -11,11 +14,16 @@ var corsOptions = {
 
 app.use(cors());
 
-// parse requests of application/json
-app.use(express.json());
+// enable files upload
+app.use(fileUpload({
+    createParentPath: true
+}));
 
-// parse requests of application/x-www-form-urlencoded
-app.use(express.urlencoded({ extended: true }));
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: true}));
+
+app.use(morgan('dev'));
 
 const db = require("./src/models");
 db.mongoose
@@ -39,6 +47,7 @@ require("./src/routes/tarjetasr.routes")(app);
 require("./src/routes/tarjetascompleto.routes")(app);
 require("./src/routes/auxiliar.routes")(app);
 require("./src/routes/extracto.routes")(app);
+require("./src/routes/files.routes")(app);
 
 // set port and listen for requests
 const PORT = process.env.PORT || 8080;
