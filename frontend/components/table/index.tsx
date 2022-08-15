@@ -24,7 +24,10 @@ const CustomTable = ({ data, columns, loading }: Props) => {
       dataSource={data}
       columns={columns}
       expandable={{
-        expandedRowRender: (record) => <AllCards id={record.id} />,
+        expandedRowRender: (record) => {
+          console.log("taken", record);
+          return <AllCards id={record.id} />;
+        },
         rowExpandable: (record) => record["asociado"]?.length > 0,
       }}
       loading={loading}

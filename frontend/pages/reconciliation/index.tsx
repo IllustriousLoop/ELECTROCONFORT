@@ -5,13 +5,19 @@ import type { RcFile, UploadFile, UploadProps } from "antd/es/upload/interface";
 import { toast } from "react-toastify";
 import axios from "axios";
 import Link from "next/link";
+import Premium from "../../components/Premium";
 
 const Reconciliation = () => {
   const [month, setMonth] = useState(1);
   const [fileList, setFileList] = useState<UploadFile[]>([]);
   const [uploading, setUploading] = useState(false);
+  const [premium, setPremium] = useState(false);
 
   const handleUpload = () => {
+    if (true) {
+      setPremium(true);
+      return;
+    }
     const formData = new FormData();
     fileList.forEach((file) => {
       formData.append("file", file as RcFile);
@@ -66,6 +72,11 @@ const Reconciliation = () => {
 
   return (
     <div>
+      <Premium
+        view={premium}
+        message={"Subir archivos es una funcion premium"}
+        handleCancel={() => setPremium(false)}
+      />
       <Row>
         <Col span={24}>
           <Input
