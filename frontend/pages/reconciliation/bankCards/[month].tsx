@@ -13,28 +13,11 @@ import { AllCardsData } from "../../../ts/types/bank/getAllCards";
 import { auxiliaryData } from "../../../ts/interfaces/siigo/auxiliary.interfaces";
 import { columnsAuxiliary } from "../../../utils";
 import EditableCell from "../../../components/table/EditCell";
+import findAssociateValues from "../../../utils/functions/findAssociatedValues";
 
 interface Props {
   summaryCards: SummaryCardsData;
 }
-
-const findAssociateValues = async (
-  summaryCards: GetSummaryCards,
-  month: number
-) => {
-  const { data } = await axios.post(
-    `/api/bank/set/associateValues`,
-    JSON.stringify({ summaryCards, month }),
-    {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    }
-  );
-  if (data) {
-    console.log("Obteniendo valores asociados", data);
-  }
-};
 
 const ReconciliationByMonth: NextPage<Props> = ({ summaryCards }) => {
   const [view, setView] = useState(false);

@@ -6,7 +6,7 @@ import { SummaryCardsData } from "../../ts/types/bank/getSummaryCards.types";
 import { AuxiliaryData } from "../../ts/types/siigo/getAuxiliary.types";
 import AllCards from "../reconciliation/card/AllCards";
 
-//!TODO: fix types 
+//!TODO: fix types
 
 type data =
   | SummaryCardsData
