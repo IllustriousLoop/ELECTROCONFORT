@@ -9,6 +9,7 @@ export default interface auxiliary {
   FRANQUICIA: string;
   "FECHA VAOUCHER": string;
   TERMINAL: number;
+  ASOCIADO: string[];
 }
 export type auxiliaryData = {
   key: string;

@@ -6,9 +6,14 @@ import { columnsAllCards } from "../../../utils";
 import CustomTable from "../../table";
 import { toast } from "react-toastify";
 import { Zoom, Flip } from "react-toastify";
+import { AllCardsData } from "../../../ts/types/bank/getAllCards";
 
 interface Props {
   id: string;
+  selection?: {
+    selectedRow: AllCardsData;
+    onChange: (i: React.Key[], selectedRow: AllCardsData) => void;
+  };
 }
 
 const useFetchData = (id: string) => {
@@ -65,10 +70,15 @@ const useFetchData = (id: string) => {
   };
 };
 
-const AllCards: FC<Props> = ({ id }) => {
+const AllCards: FC<Props> = ({ id, selection }) => {
   const { data, loading } = useFetchData(id);
   return (
-    <CustomTable data={data} columns={columnsAllCards} loading={loading} />
+    <CustomTable
+      data={data}
+      columns={columnsAllCards}
+      loading={loading}
+      selection={selection}
+    />
   );
 };
 
