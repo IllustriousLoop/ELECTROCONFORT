@@ -10,6 +10,7 @@ module.exports = (mongoose) => {
       FRANQUICIA: String,
       "FECHA VAOUCHER": String,
       TERMINAL: Number,
+      ASOCIADO: [mongoose.Schema.Types.Mixed],
     },
     { timestamps: true }
   );

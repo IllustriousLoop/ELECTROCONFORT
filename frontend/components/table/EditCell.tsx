@@ -1,6 +1,7 @@
-import { InputRef, Space } from "antd";
+import { Button, Space } from "antd";
+import { CheckOutlined } from "@ant-design/icons";
 import { PlusOutlined } from "@ant-design/icons";
-import { Input, Tag } from "antd";
+import { AutoComplete, Tag } from "antd";
 import { useEffect, useRef, useState } from "react";
 import { auxiliaryData } from "../../ts/interfaces/siigo/auxiliary.interfaces";
 
@@ -21,9 +22,9 @@ const EditableCell: React.FC<EditableCellProps> = ({
   const [inputVisible, setInputVisible] = useState(false);
   const [inputValue, setInputValue] = useState("");
   const [editInputIndex, setEditInputIndex] = useState(-1);
-  const [editInputValue, setEditInputValue] = useState("");
-  const inputRef = useRef<InputRef>(null);
-  const editInputRef = useRef<InputRef>(null);
+  const [editInputValue, setEditInputValue] = useState<string>("");
+  const inputRef = useRef<any>(null);
+  const editInputRef = useRef<any>(null);
 
   useEffect(() => {
     if (inputVisible) {
@@ -40,8 +41,8 @@ const EditableCell: React.FC<EditableCellProps> = ({
     handleSave({ ...record, ASOCIADO: [...newTags] });
   };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setInputValue(e.target.value);
+  const handleInputChange = (data: string) => {
+    setInputValue(data);
   };
 
   const handleInputConfirm = () => {
@@ -52,8 +53,8 @@ const EditableCell: React.FC<EditableCellProps> = ({
     setInputValue("");
   };
 
-  const handleEditInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setEditInputValue(e.target.value);
+  const handleEditInputChange = (data: string) => {
+    setEditInputValue(data);
   };
 
   const handleEditInputConfirm = () => {
@@ -66,6 +67,13 @@ const EditableCell: React.FC<EditableCellProps> = ({
 
   let childNode = children;
 
+  const options = [
+    { value: "tarjeta", label: "Tarjetas" },
+    { value: "gasto", label: "Gasto Bank" },
+    { value: "credito", label: "Credito" },
+    { value: "debitos", label: "Debito" },
+  ];
+
   if (editable) {
     childNode = (
       <div className="editable-cell-value-wrap" style={{ paddingRight: 24 }}>
@@ -73,16 +81,22 @@ const EditableCell: React.FC<EditableCellProps> = ({
           {record.ASOCIADO.map((tag, index) => {
             if (editInputIndex === index) {
               return (
-                <Input
-                  ref={editInputRef}
-                  key={tag}
-                  size="small"
-                  className="tag-input"
-                  value={editInputValue}
-                  onChange={handleEditInputChange}
-                  onBlur={handleEditInputConfirm}
-                  onPressEnter={handleEditInputConfirm}
-                />
+                <Space>
+                  <AutoComplete
+                    ref={editInputRef}
+                    key={tag}
+                    style={{ width: 100 }}
+                    options={options}
+                    value={editInputValue}
+                    onChange={handleEditInputChange}
+                    onSelect={handleEditInputChange}
+                  />
+                  <Button
+                    type="primary"
+                    icon={<CheckOutlined />}
+                    onClick={handleEditInputConfirm}
+                  />
+                </Space>
               );
             }
 
@@ -111,16 +125,22 @@ const EditableCell: React.FC<EditableCellProps> = ({
             return tagElem;
           })}
           {inputVisible && (
-            <Input
-              ref={inputRef}
-              type="text"
-              size="small"
-              className="tag-input"
-              value={inputValue}
-              onChange={handleInputChange}
-              onBlur={handleInputConfirm}
-              onPressEnter={handleInputConfirm}
-            />
+            <Space>
+              <AutoComplete
+                ref={inputRef}
+                style={{ width: 100 }}
+                options={options}
+                value={inputValue}
+                onChange={handleInputChange}
+                onSelect={handleInputChange}
+              />
+              <Button
+                type="primary"
+                shape="circle"
+                icon={<CheckOutlined />}
+                onClick={handleInputConfirm}
+              />
+            </Space>
           )}
           {!inputVisible && (
             <Tag

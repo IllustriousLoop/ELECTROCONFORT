@@ -14,6 +14,7 @@ import { auxiliaryData } from "../../../ts/interfaces/siigo/auxiliary.interfaces
 import { columnsAuxiliary } from "../../../utils";
 import EditableCell from "../../../components/table/EditCell";
 import findAssociateValues from "../../../utils/functions/findAssociatedValues";
+import { toast } from "react-toastify";
 
 interface Props {
   summaryCards: SummaryCardsData;
@@ -54,8 +55,7 @@ const ReconciliationByMonth: NextPage<Props> = ({ summaryCards }) => {
             (record) => record["DEBITOS"] === item
           );
 
-          filterData.forEach((item) => (item.ASOCIADO = [])),
-            setAuxiliary(filterData);
+          setAuxiliary(filterData);
         });
     } else setAuxiliary([]);
   }, [selection]);
@@ -77,6 +77,39 @@ const ReconciliationByMonth: NextPage<Props> = ({ summaryCards }) => {
       ...item,
       ...row,
     });
+
+    const options = {
+      method: "PUT",
+      url: `http://192.168.0.8:5000/api/auxiliar/${row.key}`,
+      data: { ASOCIADO: row.ASOCIADO },
+    };
+    const id = row.key;
+    toast.info("Trayendo Asociados", {
+      toastId: id,
+      autoClose: false,
+      closeButton: false,
+    });
+
+    const asyncUpdate = async () => {
+      try {
+        await axios.request(options);
+        toast.update(id, {
+          render: `Listo se Actualizo el Asociado`,
+          type: "success",
+          autoClose: 2000,
+          closeButton: true,
+        });
+      } catch (error) {
+        toast.update(id, {
+          render: `No se actualizo el asociado se recomienda recargar la pagina`,
+          type: "error",
+          autoClose: 2000,
+          closeButton: true,
+        });
+      }
+    };
+    asyncUpdate();
+
     setAuxiliary(newData);
   };
 
