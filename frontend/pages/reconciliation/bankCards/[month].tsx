@@ -1,11 +1,10 @@
 import type { NextPage, GetServerSideProps } from "next";
-import GetSummaryCards, {
-  SummaryCardsData,
-} from "../../../ts/types/bank/getSummaryCards.types";
+import { CheckOutlined } from "@ant-design/icons";
+import { SummaryCardsData } from "../../../ts/types/bank/getSummaryCards.types";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import SummaryCards from "../../../components/reconciliation/card/SummaryCards";
-import { Button, Col, Row } from "antd";
+import { Button, Col, Input, Row, Space } from "antd";
 import { useRouter } from "next/router";
 import Auxiliary from "../../../components/reconciliation/Auxiliary";
 import { AuxiliaryData } from "../../../ts/types/siigo/getAuxiliary.types";
@@ -22,6 +21,11 @@ interface Props {
 
 const ReconciliationByMonth: NextPage<Props> = ({ summaryCards }) => {
   const [view, setView] = useState(false);
+  const [selection, setSelection] = useState<AllCardsData>([]);
+  const [auxiliary, setAuxiliary] = useState<AuxiliaryData>([]);
+  const [password, setPassword] = useState<string>("");
+  const [unlock, setUnlock] = useState(false);
+
   const router = useRouter();
 
   useEffect(() => {
@@ -31,7 +35,6 @@ const ReconciliationByMonth: NextPage<Props> = ({ summaryCards }) => {
     }
   }, [summaryCards]);
 
-  const [selection, setSelection] = useState<AllCardsData>([]);
   const onSelectChange = (i: React.Key[], selectedRow: AllCardsData) => {
     setSelection(selectedRow);
   };
@@ -40,8 +43,6 @@ const ReconciliationByMonth: NextPage<Props> = ({ summaryCards }) => {
     selectedRow: selection,
     onChange: onSelectChange,
   };
-
-  const [auxiliary, setAuxiliary] = useState<AuxiliaryData>([]);
 
   useEffect(() => {
     if (selection.length > 0) {
@@ -127,8 +128,30 @@ const ReconciliationByMonth: NextPage<Props> = ({ summaryCards }) => {
     };
   });
 
+  const handleUnlock = () => {
+    if (password === "JhairDev" && unlock === false) {
+      setUnlock(true);
+    } else {
+      setUnlock(false);
+    }
+  };
+
   return (
     <>
+      <Space>
+        <Input
+          type="password"
+          placeholder="Password"
+          onChange={(e) => setPassword(e.target.value)}
+        />
+        <Button
+          type="primary"
+          shape="circle"
+          icon={<CheckOutlined />}
+          onClick={handleUnlock}
+        />
+      </Space>
+
       {view ? null : (
         <div style={{ height: "10vh", width: "100%" }}>
           <Button
@@ -150,22 +173,24 @@ const ReconciliationByMonth: NextPage<Props> = ({ summaryCards }) => {
           />
         </Col>
       </Row>
-      <Row>
-        <Col span={24}>
-          <Auxiliary
-            auxiliary={auxiliary}
-            addition={{
-              columns,
-              rowClassName: () => "editable-row",
-              components: {
-                body: {
-                  cell: EditableCell,
+      {unlock && (
+        <Row>
+          <Col span={24}>
+            <Auxiliary
+              auxiliary={auxiliary}
+              addition={{
+                columns,
+                rowClassName: () => "editable-row",
+                components: {
+                  body: {
+                    cell: EditableCell,
+                  },
                 },
-              },
-            }}
-          />
-        </Col>
-      </Row>
+              }}
+            />
+          </Col>
+        </Row>
+      )}
     </>
   );
 };
