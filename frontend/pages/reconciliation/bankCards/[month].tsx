@@ -13,103 +13,29 @@ import { auxiliaryData } from "../../../ts/interfaces/siigo/auxiliary.interfaces
 import { columnsAuxiliary } from "../../../utils";
 import EditableCell from "../../../components/table/EditCell";
 import findAssociateValues from "../../../utils/functions/findAssociatedValues";
-import { toast } from "react-toastify";
+import useFetchBySelection from "../../../hooks/requests/useFetchBySelection";
 
 interface Props {
   summaryCards: SummaryCardsData;
 }
 
 const ReconciliationByMonth: NextPage<Props> = ({ summaryCards }) => {
-  const [selection, setSelection] = useState<AllCardsData>([]);
-  const [auxiliary, setAuxiliary] = useState<AuxiliaryData>([]);
+  const [selectedRow, setSelectedRow] = useState<AllCardsData>([]);
+  const [auxiliary, handleSave] = useFetchBySelection(selectedRow);
   const [password, setPassword] = useState<string>("");
   const [unlock, setUnlock] = useState(false);
-
   const router = useRouter();
 
-  const onSelectChange = (i: React.Key[], selectedRow: AllCardsData) => {
-    setSelection(selectedRow);
-  };
+  const onChange = (i: React.Key[], selectedRow: AllCardsData) =>
+    setSelectedRow(selectedRow);
 
   const rowSelection = {
-    selectedRow: selection,
-    onChange: onSelectChange,
+    selectedRow,
+    onChange,
   };
 
-  useEffect(() => {
-    if (selection.length > 0) {
-      const item = selection[0]["Vlr Total"];
-      axios
-        .get<AuxiliaryData>(
-          `http://192.168.0.8/api/siigo/auxiliary/?month=${router.query.month}`
-        )
-        .then(({ data }) => {
-          const filterData = data.filter(
-            (record) => record["DEBITOS"] === item
-          );
-
-          setAuxiliary(filterData);
-        });
-    } else setAuxiliary([]);
-  }, [selection]);
-
-  const columnsM = () => {
-    const cols = [];
-    columnsAuxiliary.map((item) => cols.push(item));
-    cols.push({ dataIndex: "ASOCIADO", title: "ASOCIADO", editable: true });
-    return cols;
-  };
-
-  const defaultColumns = columnsM();
-
-  const handleSave = (row: auxiliaryData) => {
-    const newData = [...auxiliary];
-    const index = newData.findIndex((item) => row.key === item.key);
-    const item = newData[index];
-    newData.splice(index, 1, {
-      ...item,
-      ...row,
-    });
-
-    const options = {
-      method: "PUT",
-      url: `http://192.168.0.8:5000/api/auxiliar/${row.key}`,
-      data: { ASOCIADO: row.ASOCIADO },
-    };
-    const id = row.key;
-    toast.info("Trayendo Asociados", {
-      toastId: id,
-      autoClose: false,
-      closeButton: false,
-    });
-
-    const asyncUpdate = async () => {
-      try {
-        await axios.request(options);
-        toast.update(id, {
-          render: `Listo se Actualizo el Asociado`,
-          type: "success",
-          autoClose: 2000,
-          closeButton: true,
-        });
-      } catch (error) {
-        toast.update(id, {
-          render: `No se actualizo el asociado se recomienda recargar la pagina`,
-          type: "error",
-          autoClose: 2000,
-          closeButton: true,
-        });
-      }
-    };
-    asyncUpdate();
-
-    setAuxiliary(newData);
-  };
-
-  const columns = defaultColumns.map((col) => {
-    if (!col.editable) {
-      return col;
-    }
+  const columns = columnsAuxiliary.map((col) => {
+    if (!col.editable) return col;
     return {
       ...col,
       onCell: (record: auxiliaryData) => ({
@@ -121,11 +47,8 @@ const ReconciliationByMonth: NextPage<Props> = ({ summaryCards }) => {
   });
 
   const handleUnlock = () => {
-    if (password === "JhairDev" && unlock === false) {
-      setUnlock(true);
-    } else {
-      setUnlock(false);
-    }
+    if (password === "JhairDev" && unlock === false) setUnlock(true);
+    else setUnlock(false);
   };
 
   return (

@@ -5,7 +5,7 @@ import GetSummaryCards, {
 } from "../../../ts/types/bank/getSummaryCards.types";
 
 const handlerGetSummaryCards: HandlerGetSummaryCards = async (req, res) => {
-  const apiUrl = process.env.BACKEND_URL;
+  const apiUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
 
   const response = await axios.get<GetSummaryCards>(
     `${apiUrl}/tarjetasr/?MES=${req.query.month}`

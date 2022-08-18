@@ -4,7 +4,7 @@ import GetAllCards from "../../../../ts/types/bank/getAllCards";
 import functionAssociateValues, {
   HandlerSetAssociateValues,
 } from "../../../../ts/types/bank/setAssociateValues";
-const apiUrl = process.env.BACKEND_URL;
+const apiUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
 
 const javascriptDate = (param: any, name: string) =>
   param[name] ? new Date(param[name]).getTime() : "";

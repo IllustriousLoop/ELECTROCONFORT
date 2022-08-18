@@ -2,7 +2,7 @@ import axios from "axios";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { Flip, toast, Zoom } from "react-toastify";
-import GetAssociatedCards from "../ts/types/bank/getAssociatedCards";
+import GetAssociatedCards from "../../ts/types/bank/getAssociatedCards";
 
 const useFetchAllCards = (id: string) => {
   const [data, setData] = useState<GetAssociatedCards>();

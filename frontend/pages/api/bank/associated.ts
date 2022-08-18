@@ -8,7 +8,7 @@ const handlerGetAssociatedCards: HandlerGetAssociatedCards = async (
   req,
   res
 ) => {
-  const apiUrl = process.env.BACKEND_URL;
+  const apiUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
 
   const { id, month } = req.body;
   let sum: number = 0;

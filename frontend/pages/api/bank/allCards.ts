@@ -5,7 +5,7 @@ import GetAllCards, {
 } from "../../../ts/types/bank/getAllCards";
 
 const handlerGetAllCards: HandlerGetAllCards = async (req, res) => {
-  const apiUrl = process.env.BACKEND_URL;
+  const apiUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
 
   const response = await axios.get<GetAllCards>(
     `${apiUrl}/tarjetascompleto/?MES=${req.query.month}`

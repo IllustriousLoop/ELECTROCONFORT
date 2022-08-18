@@ -9,7 +9,6 @@ import { Col, Row } from "antd";
 interface Props {
   auxiliary: AuxiliaryData;
   statement: BankStatementData;
-  month: number;
 }
 
 const ReconciliationByMonth: NextPage<Props> = (props) => {
@@ -35,7 +34,7 @@ export const getServerSideProps: GetServerSideProps<Props> = async (
   const { month } = context.query;
 
   const statement = await axios.get<BankStatementData>(
-    "/api/bank/statement?month=" + month
+    `/api/bank/statement?month=${month}`
   );
   const auxiliary = await axios.get<AuxiliaryData>(
     `/api/siigo/auxiliary/?month=${month}`
@@ -45,7 +44,6 @@ export const getServerSideProps: GetServerSideProps<Props> = async (
     props: {
       auxiliary: auxiliary.data,
       statement: statement.data,
-      month: Number(month),
     },
   };
 };

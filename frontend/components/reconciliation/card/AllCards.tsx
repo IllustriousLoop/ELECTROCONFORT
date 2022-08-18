@@ -2,7 +2,7 @@ import { FC } from "react";
 import { columnsAllCards } from "../../../utils";
 import CustomTable from "../../table";
 import { AllCardsData } from "../../../ts/types/bank/getAllCards";
-import useFetchAllCards from "../../../hooks/useFetchAllCards";
+import useFetchAllCards from "../../../hooks/requests/useFetchAllCards";
 
 interface Props {
   id: string;

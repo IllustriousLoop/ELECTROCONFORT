@@ -5,7 +5,7 @@ import GetSiigoAuxiliary, {
 import axios from "axios";
 
 const handlerGetBankStatement: HandlerGetSiigoAuxiliary = async (req, res) => {
-  const apiUrl = process.env.BACKEND_URL;
+  const apiUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
 
   const response = await axios.get<GetSiigoAuxiliary>(
     `${apiUrl}/extracto/?MES=${req.query.month}`

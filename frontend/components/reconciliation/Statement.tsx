@@ -1,34 +1,22 @@
 import { FC } from "react";
-import axios from "axios";
 import CustomTable from "../table";
 import { columnsStatement } from "../../utils";
 import { Button, Alert, Row, Col } from "antd";
 import { BankStatementData } from "../../ts/types/bank/getStatement.types";
+import useFetchStatement from "../../hooks/useReconcilation";
 
 interface Props {
   statement: BankStatementData;
-  month: number;
 }
 
-const Statement: FC<Props> = ({ statement, month }) => {
-  const reconciliationData = async () => {
-    const { data } = await axios.post(
-      "/api/bank/set/reconciliation",
-      JSON.stringify({ statement, month }),
-      {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
-    console.log(data);
-  };
+const Statement: FC<Props> = ({ statement }) => {
+  const reconciliation = useFetchStatement(statement);
 
   return (
     <>
       <Row>
         <Col span={8}>
-          <Button type="primary" onClick={() => reconciliationData()}>
+          <Button type="primary" onClick={() => reconciliation()}>
             Conciliar Extracto
           </Button>
         </Col>

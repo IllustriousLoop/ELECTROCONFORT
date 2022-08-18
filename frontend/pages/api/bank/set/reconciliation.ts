@@ -6,7 +6,7 @@ import functionReconciliation, {
 } from "../../../../ts/types/bank/setReconciliation";
 import GetSiigoAuxiliary from "../../../../ts/types/siigo/getAuxiliary.types";
 
-const apiUrl = process.env.BACKEND_URL;
+const apiUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
 type fnDays = (date: string, days: number) => Date;
 
 const addDays: fnDays = (date, days) => {

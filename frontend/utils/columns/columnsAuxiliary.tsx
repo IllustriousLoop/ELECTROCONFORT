@@ -1,8 +1,10 @@
-import type { ColumnsType } from "antd/es/table";
-import type { auxiliaryData } from "../../ts/interfaces/siigo/auxiliary.interfaces";
+import { Table } from "antd";
 import dateFilter from "../filters/date";
 
-const columnsAuxiliary: ColumnsType<auxiliaryData> = [
+type EditableTableProps = Parameters<typeof Table>[0];
+type ColumnTypes = Exclude<EditableTableProps["columns"], undefined>;
+
+const columnsAuxiliary: (ColumnTypes[number] & { editable?: boolean })[] = [
   {
     dataIndex: "COMPROBANTE",
     title: "Comprobante",
@@ -25,6 +27,7 @@ const columnsAuxiliary: ColumnsType<auxiliaryData> = [
     ...dateFilter("FECHA VAOUCHER"),
   },
   { dataIndex: "TERMINAL", title: "Terminal" },
+  { dataIndex: "ASOCIADO", title: "ASOCIADO", editable: true },
 ];
 
 // { dataIndex: "id", title: "ID" },
