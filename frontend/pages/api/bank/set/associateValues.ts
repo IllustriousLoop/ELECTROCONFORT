@@ -21,7 +21,7 @@ const fnEveryDayOfMonth = (mes: number, año: number) => {
 
 const terminals: number[] = [15969009, 15969017, 15969066, 15969082, 15969090],
   franchises: string[] = ["DCN", "MNS", "VNS"],
-  transactions: number[] = [6, 26, 420, 78];
+  transactions: number[] = [6, 26, 420, 78,440];
 
 const configAxios = { timeout: 2700000 };
 

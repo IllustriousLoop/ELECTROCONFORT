@@ -20,20 +20,12 @@ interface Props {
 }
 
 const ReconciliationByMonth: NextPage<Props> = ({ summaryCards }) => {
-  const [view, setView] = useState(false);
   const [selection, setSelection] = useState<AllCardsData>([]);
   const [auxiliary, setAuxiliary] = useState<AuxiliaryData>([]);
   const [password, setPassword] = useState<string>("");
   const [unlock, setUnlock] = useState(false);
 
   const router = useRouter();
-
-  useEffect(() => {
-    if (summaryCards.length > 0) {
-      if (summaryCards[0]["asociado"].length === 0) setView(false);
-      else setView(true);
-    }
-  }, [summaryCards]);
 
   const onSelectChange = (i: React.Key[], selectedRow: AllCardsData) => {
     setSelection(selectedRow);
@@ -152,7 +144,7 @@ const ReconciliationByMonth: NextPage<Props> = ({ summaryCards }) => {
         />
       </Space>
 
-      {view ? null : (
+      {unlock && (
         <div style={{ height: "10vh", width: "100%" }}>
           <Button
             type="primary"
