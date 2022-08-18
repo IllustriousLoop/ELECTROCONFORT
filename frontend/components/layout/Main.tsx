@@ -13,7 +13,7 @@ import { useRouter } from "next/router";
 const { Content, Footer, Sider } = Layout;
 
 type Props = {
-  children: JSX.Element[] | JSX.Element[];
+  children: JSX.Element[] | JSX.Element;
 };
 type MenuItem = Required<MenuProps>["items"][number];
 
