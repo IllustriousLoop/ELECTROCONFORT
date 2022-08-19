@@ -1,12 +1,20 @@
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Button, Col, Input, Popconfirm, Row, Space, Upload } from "antd";
 import { UploadOutlined, FileAddOutlined } from "@ant-design/icons";
 import Link from "next/link";
 import useUploadFiles from "../../hooks/useUploadFiles";
+import auth from "../../hooks/context/auth";
+import { useRouter } from "next/router";
 
 const Reconciliation = () => {
   const [month, setMonth] = useState<number>(1);
   const [status, UploadFiles, { uploadProps }] = useUploadFiles(month);
+  const [{ isAuthenticated }] = useContext(auth);
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!isAuthenticated) router.push(`/auth/signIn?redirect=${router.asPath}`);
+  }, [isAuthenticated]);
 
   return (
     <div>
@@ -36,7 +44,7 @@ const Reconciliation = () => {
 
             <Popconfirm
               title="Are you sure upload this month?"
-              onConfirm={()=>UploadFiles()}
+              onConfirm={() => UploadFiles()}
               okText="Yes"
               cancelText="No"
             >

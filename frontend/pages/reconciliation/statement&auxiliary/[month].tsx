@@ -5,6 +5,9 @@ import { BankStatementData } from "../../../ts/types/bank/getStatement.types";
 import Auxiliary from "../../../components/reconciliation/Auxiliary";
 import Statement from "../../../components/reconciliation/Statement";
 import { Col, Row } from "antd";
+import auth from "../../../hooks/context/auth";
+import { useContext, useEffect } from "react";
+import { useRouter } from "next/router";
 
 interface Props {
   auxiliary: AuxiliaryData;
@@ -12,6 +15,13 @@ interface Props {
 }
 
 const ReconciliationByMonth: NextPage<Props> = (props) => {
+  const [{ isAuthenticated }] = useContext(auth);
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!isAuthenticated) router.push(`/auth/signIn?redirect=${router.asPath}`);
+  }, [isAuthenticated]);
+
   return (
     <>
       <Row>

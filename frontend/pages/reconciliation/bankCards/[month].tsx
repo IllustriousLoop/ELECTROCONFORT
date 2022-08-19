@@ -2,7 +2,7 @@ import type { NextPage, GetServerSideProps } from "next";
 import { CheckOutlined } from "@ant-design/icons";
 import { SummaryCardsData } from "../../../ts/types/bank/getSummaryCards.types";
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import SummaryCards from "../../../components/reconciliation/card/SummaryCards";
 import { Button, Col, Input, Row, Space } from "antd";
 import { useRouter } from "next/router";
@@ -14,6 +14,8 @@ import { columnsAuxiliary } from "../../../utils";
 import EditableCell from "../../../components/table/EditCell";
 import findAssociateValues from "../../../utils/functions/findAssociatedValues";
 import useFetchBySelection from "../../../hooks/requests/useFetchBySelection";
+import auth from "../../../hooks/context/auth";
+import { Role } from "../../../ts/types/auth/authData";
 
 interface Props {
   summaryCards: SummaryCardsData;
@@ -22,9 +24,12 @@ interface Props {
 const ReconciliationByMonth: NextPage<Props> = ({ summaryCards }) => {
   const [selectedRow, setSelectedRow] = useState<AllCardsData>([]);
   const [auxiliary, handleSave] = useFetchBySelection(selectedRow);
-  const [password, setPassword] = useState<string>("");
-  const [unlock, setUnlock] = useState(false);
+  const [{ isAuthenticated, role }] = useContext(auth);
   const router = useRouter();
+
+  useEffect(() => {
+    if (!isAuthenticated) router.push(`/auth/signIn?redirect=${router.asPath}`);
+  }, [isAuthenticated]);
 
   const onChange = (i: React.Key[], selectedRow: AllCardsData) =>
     setSelectedRow(selectedRow);
@@ -46,28 +51,9 @@ const ReconciliationByMonth: NextPage<Props> = ({ summaryCards }) => {
     };
   });
 
-  const handleUnlock = () => {
-    if (password === "JhairDev" && unlock === false) setUnlock(true);
-    else setUnlock(false);
-  };
-
   return (
     <>
-      <Space>
-        <Input
-          type="password"
-          placeholder="Password"
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        <Button
-          type="primary"
-          shape="circle"
-          icon={<CheckOutlined />}
-          onClick={handleUnlock}
-        />
-      </Space>
-
-      {unlock && (
+      {role === Role.ADMIN ? (
         <div style={{ height: "10vh", width: "100%" }}>
           <Button
             type="primary"
@@ -78,7 +64,7 @@ const ReconciliationByMonth: NextPage<Props> = ({ summaryCards }) => {
             Buscar Asociados
           </Button>
         </div>
-      )}
+      ) : null}
 
       <Row>
         <Col span={24}>
@@ -88,7 +74,7 @@ const ReconciliationByMonth: NextPage<Props> = ({ summaryCards }) => {
           />
         </Col>
       </Row>
-      {unlock && (
+      {role === Role.ADMIN ? (
         <Row>
           <Col span={24}>
             <Auxiliary
@@ -105,7 +91,7 @@ const ReconciliationByMonth: NextPage<Props> = ({ summaryCards }) => {
             />
           </Col>
         </Row>
-      )}
+      ) : null}
     </>
   );
 };

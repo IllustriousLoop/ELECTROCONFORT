@@ -5,8 +5,10 @@ import type {
   UploadProps,
 } from "antd/es/upload/interface";
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
+import { Role } from "../ts/types/auth/authData";
+import auth from "./context/auth";
 
 type status = "wait" | "ready" | "uploading";
 type useUploadFilesReturn = [status, () => void, { uploadProps: UploadProps }];
@@ -15,6 +17,7 @@ type useUploadFilesType = (month: number) => useUploadFilesReturn;
 const useUploadFiles: useUploadFilesType = (month) => {
   const [fileList, setFileList] = useState<UploadFile[]>([]);
   const [status, setStatus] = useState<status>("wait");
+  const [{ role }] = useContext(auth);
 
   useEffect(() => {
     if (fileList.length > 0) setStatus("ready");
@@ -22,32 +25,36 @@ const useUploadFiles: useUploadFilesType = (month) => {
   }, [fileList]);
 
   const UploadFiles = () => {
-    const formData = new FormData();
+    if (role === Role.ADMIN) {
+      const formData = new FormData();
 
-    fileList.forEach((file) => formData.append("file", file as RcFile));
+      fileList.forEach((file) => formData.append("file", file as RcFile));
 
-    setStatus("uploading");
+      setStatus("uploading");
 
-    const asyncSendForm = async () => {
-      await axios.post(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/upload/files?MES=${month}`,
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
-      setFileList([]);
-    };
+      const asyncSendForm = async () => {
+        await axios.post(
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/upload/files?MES=${month}`,
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
+        setFileList([]);
+      };
 
-    toast.promise(asyncSendForm, {
-      pending: "Subiendo archivos...",
-      success: "Archivos subidos con exito",
-      error: "No se pudieron subir los archivos",
-    });
+      toast.promise(asyncSendForm, {
+        pending: "Subiendo archivos...",
+        success: "Archivos subidos con exito",
+        error: "No se pudieron subir los archivos",
+      });
 
-    setStatus("ready");
+      setStatus("ready");
+    } else {
+      toast.error("No tienes permisos para subir archivos");
+    }
   };
 
   const onRemove = (file: UploadFile) => {
