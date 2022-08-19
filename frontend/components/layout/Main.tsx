@@ -4,11 +4,14 @@ import {
   FileTextOutlined,
   ArrowLeftOutlined,
   CalendarOutlined,
+  UserOutlined,
 } from "@ant-design/icons";
 import { Layout, Menu } from "antd";
 import type { MenuProps } from "antd";
-import { createElement, useState } from "react";
+import { createElement, useContext, useState } from "react";
 import { useRouter } from "next/router";
+import auth from "../../hooks/context/auth";
+import { Role } from "../../ts/types/auth/authData";
 
 const { Content, Footer, Sider } = Layout;
 
@@ -30,6 +33,19 @@ const months = ["January", "February", "March", "April", "May"].map(
 const Main = ({ children }: Props) => {
   const [collapsed, setCollapsed] = useState(false);
   const router = useRouter();
+  const [{ role }] = useContext(auth);
+
+  const userM = {
+    key: "4",
+    icon: createElement(UserOutlined),
+    label: `User (${role})`,
+    children: [
+      {
+        key: "4-1",
+        label: "Sign out",
+      },
+    ],
+  };
 
   const items: MenuItem[] = [
     {
@@ -37,6 +53,7 @@ const Main = ({ children }: Props) => {
       icon: createElement(ArrowLeftOutlined),
       label: "Return",
     },
+    ...(role !== Role.NoRole ? [userM] : []),
     {
       key: "1",
       icon: createElement(HomeOutlined),
@@ -72,6 +89,8 @@ const Main = ({ children }: Props) => {
           router.push("/reconciliation");
         }
         break;
+      case "4-1":
+        router.push("/auth/signOut");
       default:
         if (e.key.includes("month"))
           router.push((parseInt(e.key.split("-")[1]) + 1).toString());
