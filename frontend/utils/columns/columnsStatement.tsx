@@ -9,26 +9,36 @@ const columnsStatement: ColumnsType<statementData> = [
   {
     dataIndex: "FECHA",
     title: "Fecha",
+    width: "16%",
     ...dateFilter("FECHA"),
   },
   {
     dataIndex: "DESCRIPCION",
+    width: "16%",
     title: "Descripcion",
   },
-  { dataIndex: "TERMINAL", title: "Terminal", ...terminalFilter("TERMINAL") },
+  {
+    dataIndex: "TERMINAL",
+    title: "Terminal",
+    width: "16%",
+    ...terminalFilter("TERMINAL"),
+  },
   {
     dataIndex: "DEBITO",
     title: "Debito",
+    width: "16%",
     render: (text) => formatMoney(text),
   },
   {
     dataIndex: "CREDITO",
     title: "Credito",
+    width: "16%",
     render: (text) => formatMoney(text),
   },
   {
     dataIndex: "TIPO",
     title: "Tipo",
+    width: "20%",
     render: (_, { TIPO }) => {
       return (
         <>

@@ -19,6 +19,7 @@ interface Props {
   data: any;
   columns: any;
   components?: any;
+  customX?: number;
   rowClassName?: () => string;
   loading: boolean;
   subSelection?: {
@@ -39,6 +40,7 @@ const CustomTable = ({
   loading,
   subSelection,
   selection,
+  customX,
 }: Props) => {
   return (
     <Table
@@ -46,13 +48,16 @@ const CustomTable = ({
       columns={columns}
       rowClassName={rowClassName}
       components={components}
-      expandable={{
-        expandedRowRender: (record) => {
-          return <AllCards id={record.id} selection={subSelection} />;
-        },
-        rowExpandable: (record: any) => record["asociado"]?.length > 0,
-      }}
+      expandable={
+        subSelection && {
+          expandedRowRender: (record) => (
+            <AllCards id={record.id} selection={subSelection} />
+          ),
+          rowExpandable: (record: any) => record["asociado"]?.length > 0,
+        }
+      }
       loading={loading}
+      scroll={customX ? { x: customX, y: 2500 } : { x: 800, y: 2500 }}
       rowSelection={
         selection && {
           type: "radio",

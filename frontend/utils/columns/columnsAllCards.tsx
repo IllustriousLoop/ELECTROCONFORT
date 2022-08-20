@@ -9,27 +9,32 @@ const columnsAllCards: ColumnsType<allCardData> = [
   {
     dataIndex: "Comercio",
     title: "Terminal",
+    width: "15%",
     ...terminalFilter("Comercio"),
   },
   {
     dataIndex: "Franquicia",
     title: "Franquicia",
+    width: "15%",
     ...franchiseFilter("Franquicia"),
   },
   {
     dataIndex: "Vlr Total",
     title: "Vlr Total",
+    width: "24%",
     sorter: (a, b) => a["Vlr Total"] - b["Vlr Total"],
     render: (text) => formatMoney(text),
   },
   {
     dataIndex: "F vale",
     title: "Fecha de Vale",
+    width: "23%",
     ...dateFilter("F vale"),
   },
   {
     dataIndex: "Vlr Abono",
     title: "Vlr Abono",
+    width: "23%",
     render: (text) => formatMoney(text),
     sorter: (a, b) => a["Vlr Abono"] - b["Vlr Abono"],
   },

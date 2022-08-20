@@ -33,6 +33,7 @@ const Auxiliary: FC<Props> = ({ auxiliary, addition }) => {
       columns={columnsAuxiliary}
       {...addition}
       loading={false}
+      customX={2500}
     />
   );
 };

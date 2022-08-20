@@ -4,6 +4,7 @@ import { PlusOutlined } from "@ant-design/icons";
 import { AutoComplete, Tag } from "antd";
 import { useEffect, useRef, useState } from "react";
 import { auxiliaryData } from "../../ts/interfaces/siigo/auxiliary.interfaces";
+import formatMoney from "../../utils/functions/formatMoney";
 
 interface EditableCellProps {
   editable: boolean;
@@ -77,7 +78,7 @@ const EditableCell: React.FC<EditableCellProps> = ({
   if (editable) {
     childNode = (
       <div className="editable-cell-value-wrap" style={{ paddingRight: 24 }}>
-        <Space direction="vertical" size="middle" style={{ display: "flex" }}>
+        <Space size={[3, 16]} wrap>
           {record.ASOCIADO.map((tag, index) => {
             if (editInputIndex === index) {
               return (
@@ -100,10 +101,22 @@ const EditableCell: React.FC<EditableCellProps> = ({
               );
             }
 
+            const color =
+              tag === "tarjeta"
+                ? "cyan"
+                : tag === "gasto"
+                ? "yellow"
+                : tag === "credito"
+                ? "red"
+                : tag === "debitos"
+                ? "green"
+                : "purple";
+
             const tagElem = (
               <Tag
                 className="edit-tag"
                 key={tag}
+                color={color}
                 closable={true}
                 onClose={() => handleClose(tag)}
               >
@@ -117,7 +130,7 @@ const EditableCell: React.FC<EditableCellProps> = ({
                     }
                   }}
                 >
-                  {tag}
+                  {parseInt(tag) > 0 ? formatMoney(tag) : tag}
                 </span>
               </Tag>
             );
