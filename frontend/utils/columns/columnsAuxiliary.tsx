@@ -1,5 +1,6 @@
 import { Table } from "antd";
 import dateFilter from "../filters/date";
+import formatMoney from "../functions/formatMoney";
 
 type EditableTableProps = Parameters<typeof Table>[0];
 type ColumnTypes = Exclude<EditableTableProps["columns"], undefined>;
@@ -18,8 +19,16 @@ const columnsAuxiliary: (ColumnTypes[number] & { editable?: boolean })[] = [
     dataIndex: "DESCRIPCION",
     title: "Descripcion",
   },
-  { dataIndex: "DEBITOS", title: "Debitos" },
-  { dataIndex: "CREDITOS", title: "Creditos" },
+  {
+    dataIndex: "DEBITOS",
+    title: "Debitos",
+    render: (text) => formatMoney(text),
+  },
+  {
+    dataIndex: "CREDITOS",
+    title: "Creditos",
+    render: (text) => formatMoney(text),
+  },
   { dataIndex: "FRANQUICIA", title: "Franquicia" },
   {
     dataIndex: "FECHA VAOUCHER",

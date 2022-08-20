@@ -3,6 +3,7 @@ import type { allCardData } from "../../ts/interfaces/bank/allCards.interfaces";
 import dateFilter from "../filters/date";
 import franchiseFilter from "../filters/franchise";
 import terminalFilter from "../filters/terminal";
+import formatMoney from "../functions/formatMoney";
 
 const columnsAllCards: ColumnsType<allCardData> = [
   {
@@ -19,6 +20,7 @@ const columnsAllCards: ColumnsType<allCardData> = [
     dataIndex: "Vlr Total",
     title: "Vlr Total",
     sorter: (a, b) => a["Vlr Total"] - b["Vlr Total"],
+    render: (text) => formatMoney(text),
   },
   {
     dataIndex: "F vale",
@@ -28,6 +30,7 @@ const columnsAllCards: ColumnsType<allCardData> = [
   {
     dataIndex: "Vlr Abono",
     title: "Vlr Abono",
+    render: (text) => formatMoney(text),
     sorter: (a, b) => a["Vlr Abono"] - b["Vlr Abono"],
   },
 ];
