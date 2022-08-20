@@ -33,13 +33,9 @@ const useFetchBySelection: useFetchBySelectionType = (
 
   const asyncUpdate = async (associate: string[], id: string) => {
     try {
-      const options = {
-        data: { ASOCIADO: associate },
-      };
-      await axios.put(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/auxiliar/${id}`,
-        options
-      );
+      await axios.put(`${process.env.NEXT_PUBLIC_BACKEND_URL}/auxiliar/${id}`, {
+        ASOCIADO: associate,
+      });
       toast.update(id, {
         render: `Listo se Actualizo el Asociado`,
         type: "success",
