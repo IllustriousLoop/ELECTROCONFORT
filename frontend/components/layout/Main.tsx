@@ -5,6 +5,8 @@ import {
   ArrowLeftOutlined,
   CalendarOutlined,
   UserOutlined,
+  MenuUnfoldOutlined,
+  CloseOutlined,
 } from "@ant-design/icons";
 import { Layout, Menu } from "antd";
 import type { MenuProps } from "antd";
@@ -12,6 +14,7 @@ import { createElement, useContext, useState } from "react";
 import { useRouter } from "next/router";
 import auth from "../../hooks/context/auth";
 import { Role } from "../../ts/types/auth/authData";
+import { Header } from "antd/lib/layout/layout";
 
 const { Content, Footer, Sider } = Layout;
 
@@ -31,7 +34,7 @@ const months = ["January", "February", "March", "April", "May"].map(
 );
 
 const Main = ({ children }: Props) => {
-  const [collapsed, setCollapsed] = useState(false);
+  const [collapsed, setCollapsed] = useState(true);
   const router = useRouter();
   const [{ role }] = useContext(auth);
 
@@ -108,24 +111,31 @@ const Main = ({ children }: Props) => {
       </Head>
       <Layout style={{ minHeight: "100vh" }}>
         <Sider
-          breakpoint="lg"
-          collapsedWidth="0"
+          trigger={null}
           collapsible
           collapsed={collapsed}
-          onCollapse={(value) => setCollapsed(value)}
+          collapsedWidth="0"
+          theme="light"
         >
           <div className="logo" />
-          <Menu
-            theme="dark"
-            mode="inline"
-            // defaultSelectedKeys={["4"]}
-            onClick={onClick}
-            items={items}
-          />
+          <Menu theme="light" mode="inline" onClick={onClick} items={items} />
         </Sider>
         <Layout>
+          <Header
+            style={{
+              padding: 0,
+              background: "#fff",
+              height: "35px",
+              lineHeight: "0px",
+              fontSize: "30px",
+            }}
+          >
+            {createElement(collapsed ? MenuUnfoldOutlined : CloseOutlined, {
+              onClick: () => setCollapsed(!collapsed),
+            })}
+          </Header>
           <Content>
-            <div className="site-layout-background">{children}</div>
+            <div>{children}</div>
           </Content>
           <Footer style={{ textAlign: "center", maxHeight: "100px" }}>
             Conciliador ©2022 Created by IllustriousLoop
