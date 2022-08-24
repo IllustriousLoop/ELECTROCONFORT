@@ -3,6 +3,7 @@ import type { statementData } from "../../ts/interfaces/bank/statement.interface
 import { Tag } from "antd";
 import dateFilter from "../filters/date";
 import terminalFilter from "../filters/terminal";
+import numberFilter from "../filters/number";
 import formatMoney from "../functions/formatMoney";
 
 const columnsStatement: ColumnsType<statementData> = [
@@ -27,12 +28,14 @@ const columnsStatement: ColumnsType<statementData> = [
     dataIndex: "DEBITO",
     title: "Debito",
     width: "16%",
+    ...numberFilter("DEBITO"),
     render: (text) => formatMoney(text),
   },
   {
     dataIndex: "CREDITO",
     title: "Credito",
     width: "16%",
+    ...numberFilter("CREDITO"),
     render: (text) => formatMoney(text),
   },
   {

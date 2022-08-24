@@ -2,6 +2,7 @@ import type { ColumnsType } from "antd/es/table";
 import { summaryCardData } from "../../ts/interfaces/bank/summaryCards.interfaces";
 import franchiseFilter from "../filters/franchise";
 import terminalFilter from "../filters/terminal";
+import numberFilter from "../filters/number";
 import formatMoney from "../functions/formatMoney";
 
 const columnsSummaryCards: ColumnsType<summaryCardData> = [
@@ -25,6 +26,7 @@ const columnsSummaryCards: ColumnsType<summaryCardData> = [
     title: "Vlr Total",
     width: "30%",
     render: (text) => formatMoney(text),
+    ...numberFilter("Vlr Total"),
     sorter: (a, b) => a["Valor Abono"] - b["Valor Abono"],
   },
   {
@@ -33,6 +35,7 @@ const columnsSummaryCards: ColumnsType<summaryCardData> = [
     title: "Valor Abono",
     width: "30%",
     render: (text) => formatMoney(text),
+    ...numberFilter("Valor Abono"),
     sorter: (a, b) => a["Valor Abono"] - b["Valor Abono"],
   },
 ];
