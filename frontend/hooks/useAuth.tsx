@@ -18,7 +18,7 @@ const useAuth: useAuthType = () => {
 
   const redirect = () => {
     const redirect = router.asPath.split("=")[1];
-    if (redirect) router.push(`/${redirect}`);
+    if (redirect) router.push(`${redirect}`);
     else router.push("/");
   };
 
