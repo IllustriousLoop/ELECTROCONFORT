@@ -1,15 +1,17 @@
 const tarjetascompleto = require("../controllers/tarjetascompleto.controller.js");
+const { valid } = require("../middleware/MES");
 let router = require("express").Router();
 
 module.exports = (app) => {
-  router.post("/", tarjetascompleto.create);
+  router.post("/", valid, tarjetascompleto.create);
 
-  router.get("/", tarjetascompleto.findAll);
+  router.get("/", valid, tarjetascompleto.findAll);
 
-  router.get("/all/:tipo", tarjetascompleto.findAllType);
+  router.get("/all/:tipo", valid, tarjetascompleto.findAllType);
 
   router.get(
     "/specific/:terminal/:franquicia/:dia/:tipo",
+    valid,
     tarjetascompleto.findSpecific
   );
 

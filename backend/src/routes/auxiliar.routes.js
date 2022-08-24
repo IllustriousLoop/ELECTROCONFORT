@@ -1,15 +1,17 @@
 const auxiliar = require("../controllers/auxiliar.controller.js");
 let router = require("express").Router();
+const { valid } = require("../middleware/MES");
 
 module.exports = (app) => {
-  router.post("/", auxiliar.create);
+  router.post("/", valid, auxiliar.create);
 
-  router.get("/", auxiliar.findAll);
+  router.get("/", valid, auxiliar.findAll);
 
-  router.get("/all/:tipo", auxiliar.findAllType);
+  router.get("/all/:tipo", valid, auxiliar.findAllType);
 
   router.get(
     "/specific/:terminal/:franquicia/:dia/:tipo",
+    valid,
     auxiliar.findSpecific
   );
 

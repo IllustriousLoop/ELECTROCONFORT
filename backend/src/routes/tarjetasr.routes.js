@@ -1,10 +1,11 @@
 const TarjetasR = require("../controllers/tarjetasr.controller.js");
+const { valid } = require("../middleware/MES");
 let router = require("express").Router();
 
 module.exports = (app) => {
-  router.post("/", TarjetasR.create);
+  router.post("/", valid, TarjetasR.create);
 
-  router.get("/", TarjetasR.findAll);
+  router.get("/", valid, TarjetasR.findAll);
 
   router.get("/:id", TarjetasR.findOne);
 

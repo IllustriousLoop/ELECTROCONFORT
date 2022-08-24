@@ -2,10 +2,6 @@ const db = require("../models");
 const TarjetasCompleto = db.TarjetasCompleto;
 
 exports.create = (req, res) => {
-  if (!req.body.title) {
-    return res.status(400).send({ message: "MES can not be empty!" });
-  }
-
   const record = new TarjetasCompleto(req.body);
 
   record
@@ -22,10 +18,6 @@ exports.create = (req, res) => {
 };
 
 exports.findAll = (req, res) => {
-  if (!req.query.MES) {
-    return res.status(400).send({ message: "MES can not be empty!" });
-  }
-
   const MES = parseInt(req.query.MES);
   let query = { MES: { $eq: MES } };
 
@@ -41,10 +33,6 @@ exports.findAll = (req, res) => {
 };
 
 exports.findAllType = (req, res) => {
-  if (!req.query.MES) {
-    return res.status(400).send({ message: "MES can not be empty!" });
-  }
-
   const MES = parseInt(req.query.MES);
   const type = req.params.tipo;
 
@@ -60,10 +48,6 @@ exports.findAllType = (req, res) => {
 };
 
 exports.findSpecific = (req, res) => {
-  if (!req.query.MES) {
-    return res.status(400).send({ message: "MES can not be empty!" });
-  }
-
   const MES = parseInt(req.query.MES);
   const dia = new Date(parseInt(req.params.dia)).toLocaleDateString();
   const { terminal, franquicia, tipo } = req.params;

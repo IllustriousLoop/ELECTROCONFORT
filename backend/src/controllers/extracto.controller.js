@@ -2,10 +2,6 @@ const db = require("../models");
 const Extracto = db.Extracto;
 
 exports.create = (req, res) => {
-  if (!req.body.MES) {
-    return res.status(400).send({ message: "MES can not be empty!" });
-  }
-
   const record = new Extracto(res.body);
 
   record
@@ -22,10 +18,6 @@ exports.create = (req, res) => {
 };
 
 exports.findAll = (req, res) => {
-  if (!req.query.MES) {
-    return res.status(400).send({ message: "MES can not be empty!" });
-  }
-
   const MES = parseInt(req.query.MES);
   let query = { MES: { $eq: MES } };
 

@@ -1,10 +1,11 @@
 const extracto = require("../controllers/extracto.controller.js");
 let router = require("express").Router();
+const { valid } = require("../middleware/MES");
 
 module.exports = (app) => {
-  router.post("/", extracto.create);
+  router.post("/", valid, extracto.create);
 
-  router.get("/", extracto.findAll);
+  router.get("/", valid, extracto.findAll);
 
   router.get("/:id", extracto.findOne);
 
