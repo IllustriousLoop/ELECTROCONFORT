@@ -20,7 +20,7 @@ const useUploadFiles: useUploadFilesType = (month) => {
   const [{ role }] = useContext(auth);
 
   useEffect(() => {
-    if (fileList.length > 0) setStatus("ready");
+    if (fileList.length >= 2) setStatus("ready");
     else setStatus("wait");
   }, [fileList]);
 
