@@ -1,6 +1,7 @@
 import React, { Component, ErrorInfo, ReactNode } from "react";
 import { Button, Typography } from "antd";
 import CustomHead from "./layout/CustomHead";
+import Image from "next/image";
 
 interface Props {
   children?: ReactNode;
@@ -53,6 +54,16 @@ class ErrorBoundary extends Component<Props, State> {
           <CustomHead title="Error" />
           <Title>Oops, Ocurio un error!</Title>
           <Title level={2}>{this.state.message}</Title>
+          <div
+            style={{
+              width: "100%",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <Image src={"/image/bug.svg"} width={500} height={500} />
+          </div>
           <Button
             type="primary"
             onClick={() => this.setState({ hasError: false })}
