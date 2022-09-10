@@ -5,12 +5,14 @@ type Props = {
 };
 
 const CustomHead = ({ title }: Props) => {
+  const page = title ? ` | ${title}` : "";
+
   return (
     <Head>
       <meta charSet="UTF-8" />
       <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      <title>Conciliador{title ? ` | ${title}` : ""}</title>
+      <title>{`Conciliador ${page}`}</title>
     </Head>
   );
 };

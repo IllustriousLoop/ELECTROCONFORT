@@ -2,6 +2,7 @@ import useUploadFiles from "../../../hooks/useUploadFiles";
 import { UploadOutlined, FileAddOutlined } from "@ant-design/icons";
 import { Button, Popconfirm, Upload } from "antd";
 import { useRouter } from "next/router";
+import CustomHead from "../../../components/layout/CustomHead";
 
 const UploadFiles = () => {
   const {
@@ -14,6 +15,7 @@ const UploadFiles = () => {
 
   return (
     <div>
+      <CustomHead title="Nuevo Mes" />
       <Upload {...uploadProps}>
         <Button type="dashed">
           <UploadOutlined /> Agregar archivos
