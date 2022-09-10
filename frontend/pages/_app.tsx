@@ -7,17 +7,20 @@ import "../styles/global.css";
 import "antd/dist/antd.css";
 import "react-toastify/dist/ReactToastify.min.css";
 import useAuth from "../hooks/useAuth";
+import ErrorBoundary from "../components/ErrorBoundary";
 
 function MyApp({ Component, pageProps }: AppProps) {
   const Auth = useAuth();
 
   return (
-    <auth.Provider value={Auth}>
-      <Main>
-        <ToastContainer />
-        <Component {...pageProps} />
-      </Main>
-    </auth.Provider>
+    <ErrorBoundary>
+      <auth.Provider value={Auth}>
+        <Main>
+          <ToastContainer />
+          <Component {...pageProps} />
+        </Main>
+      </auth.Provider>
+    </ErrorBoundary>
   );
 }
 
