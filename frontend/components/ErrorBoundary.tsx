@@ -1,5 +1,6 @@
 import React, { Component, ErrorInfo, ReactNode } from "react";
 import { Button, Typography } from "antd";
+import CustomHead from "./layout/CustomHead";
 
 interface Props {
   children?: ReactNode;
@@ -37,7 +38,8 @@ class ErrorBoundary extends Component<Props, State> {
             <Link href="http://jhairparis.com/#contact" target="_blank" italic>
               Jhair
             </Link>
-            <Text> para arreglar este </Text><Text type="danger">error</Text>
+            <Text> para arreglar este </Text>
+            <Text type="danger">error</Text>
           </>
         ),
       });
@@ -48,6 +50,7 @@ class ErrorBoundary extends Component<Props, State> {
     if (this.state.hasError) {
       return (
         <div>
+          <CustomHead title="Error" />
           <Title>Oops, Ocurio un error!</Title>
           <Title level={2}>{this.state.message}</Title>
           <Button

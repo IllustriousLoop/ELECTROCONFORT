@@ -8,6 +8,7 @@ import { Col, Row } from "antd";
 import auth from "../../../hooks/context/auth";
 import { useContext, useEffect } from "react";
 import { useRouter } from "next/router";
+import CustomHead from "../../../components/layout/CustomHead";
 
 interface Props {
   auxiliary: AuxiliaryData;
@@ -24,6 +25,7 @@ const ReconciliationByMonth: NextPage<Props> = (props) => {
 
   return (
     <>
+      <CustomHead title="Extracto y Auxiliar" />
       <Row>
         <Col span={24}>
           <Statement {...props} />

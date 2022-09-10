@@ -3,6 +3,7 @@ import { Button, Col, Input, Row, Space } from "antd";
 import Link from "next/link";
 import auth from "../../hooks/context/auth";
 import { useRouter } from "next/router";
+import CustomHead from "../../components/layout/CustomHead";
 
 const Reconciliation = () => {
   const [month, setMonth] = useState<number>(1);
@@ -15,6 +16,7 @@ const Reconciliation = () => {
 
   return (
     <div>
+      <CustomHead title="Tablero"/>
       <Row>
         <Col span={24}>
           <Input

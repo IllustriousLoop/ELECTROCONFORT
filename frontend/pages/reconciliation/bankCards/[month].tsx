@@ -16,6 +16,7 @@ import findAssociateValues from "../../../utils/functions/findAssociatedValues";
 import useFetchBySelection from "../../../hooks/requests/useFetchBySelection";
 import auth from "../../../hooks/context/auth";
 import { Role } from "../../../ts/types/auth/authData";
+import CustomHead from "../../../components/layout/CustomHead";
 
 interface Props {
   summaryCards: SummaryCardsData;
@@ -53,6 +54,7 @@ const ReconciliationByMonth: NextPage<Props> = ({ summaryCards }) => {
 
   return (
     <>
+      <CustomHead title="Extracto de tarjetas" />
       {role === Role.ADMIN ? (
         <div style={{ height: "10vh", width: "100%" }}>
           <Button
