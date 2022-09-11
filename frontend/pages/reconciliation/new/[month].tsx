@@ -3,15 +3,25 @@ import { UploadOutlined, FileAddOutlined } from "@ant-design/icons";
 import { Button, Popconfirm, Upload } from "antd";
 import { useRouter } from "next/router";
 import CustomHead from "../../../components/layout/CustomHead";
+import { useContext, useEffect } from "react";
+import auth from "../../../hooks/context/auth";
 
 const UploadFiles = () => {
+  const router = useRouter();
   const {
     query: { month },
-  } = useRouter();
+  } = router;
 
   const [status, UploadFilesConfirm, { uploadProps }] = useUploadFiles(
     Number(month)
   );
+
+  const [{ isAuthenticated }] = useContext(auth);
+
+  useEffect(() => {
+    if (!isAuthenticated)
+      router.push(`/auth/signIn?redirect=/reconciliation/new/${month}`);
+  }, [isAuthenticated]);
 
   return (
     <div>
@@ -39,6 +49,12 @@ const UploadFiles = () => {
       </Popconfirm>
     </div>
   );
+};
+
+export const getServerSideProps = async (context: any) => {
+  const { month } = context.query;
+  //add if month is in db
+  return { props: {} };
 };
 
 export default UploadFiles;
