@@ -1,29 +1,30 @@
 const express = require("express");
-const fileUpload = require('express-fileupload');
-const cors = require('cors');
-const bodyParser = require('body-parser');
-const morgan = require('morgan');
+const fileUpload = require("express-fileupload");
+const cors = require("cors");
+const bodyParser = require("body-parser");
+const morgan = require("morgan");
 
 require("dotenv").config();
 
 const app = express();
 
-var corsOptions = {
-  origin: process.env.FRONTEND_URL,
-};
+app.use(cors({ origin: "*" }));
 
-app.use(cors());
+const helmet = require("helmet");
+app.use(helmet());
 
-// enable files upload
-app.use(fileUpload({
-    createParentPath: true
-}));
+app.disable("x-powered-by");
 
+app.use(
+  fileUpload({
+    createParentPath: true,
+  })
+);
 
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.urlencoded({ extended: true }));
 
-app.use(morgan('dev'));
+app.use(morgan("tiny"));
 
 const db = require("./src/models");
 db.mongoose
