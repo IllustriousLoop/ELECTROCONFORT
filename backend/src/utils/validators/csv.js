@@ -1,60 +1,60 @@
-const fs = require("fs");
+const { utilsFormatPath } = require("../myPaths");
+const readCsv = require("./readCsv");
 const _ = require("lodash");
-const csv = require("csv-parser");
-const { dirname } = require("path");
 
-const mainPath = `${dirname(require.main.filename)}/src/utils/format/`;
+const validOneCsv = async (path, name) => {
+  try {
+    const pathOriginHeader = `${utilsFormatPath}${name}`;
+    const originHeaders = await readCsv(pathOriginHeader, false);
+    const headers = await readCsv(path, false);
 
-const ReadCsv2 = (path) => {
-  const results = [];
+    const missing = [];
 
-  return new Promise(function (resolve, reject) {
-    fs.createReadStream(path)
-      .pipe(csv())
-      .on("data", (data) => {
-        const fix = _.keysIn(data)[0].trim();
-        const m = data[_.keysIn(data)[0]];
-        delete data[_.keysIn(data)[0]];
-        results.push({ [fix]: m, ...data });
-      })
-      .on("end", () => resolve(results))
-      .on("error", (err) => reject(err));
-  });
-};
 
-const ReadCsv = (path) => {
-  const results = [];
-  return new Promise(function (resolve, reject) {
-    fs.createReadStream(path)
-      .pipe(csv())
-      .on("data", () => {})
-      .on("headers", (data) => data.forEach((element) => results.push(element)))
-      .on("end", () => resolve(results))
-      .on("error", (err) => reject(err));
-  });
-};
+    originHeaders.map((e, key) => {
+      if (e !== headers[key]) missing.push(e);
+    });
 
-const validCsv = async (path, name) => {
-  const originHeaders = await ReadCsv(mainPath + name);
-  const headers = await ReadCsv(path);
-
-  const missing = [];
-
-  originHeaders.map((e, key) => {
-    if (e !== headers[key]) {
-      missing.push(e);
-    }
-  });
-
-  if (missing.length === 0) {
-    return { valid: true };
-  } else {
+    if (missing.length === 0) return { valid: true };
+    else
+      return {
+        valid: false,
+        error: `${name} is not a valid`,
+        data: missing,
+      };
+  } catch (error) {
     return {
       valid: false,
-      error: `${name} is not a valid`,
-      data: missing,
+      error: `No se puedo encontrar o procesar '${name}'`,
+      data: error,
     };
   }
 };
 
-module.exports = { validCsv, ReadCsv2 };
+const validationAsync = (data) => {
+  const fileValid = [];
+  const fileNoValid = [];
+
+  return new Promise(function (resolve, reject) {
+    try {
+      _.forEach(data, async (f, k) => {
+        if (f.inDataBase) {
+          fileValid.push(f);
+        } else {
+          const verify = await validOneCsv(f.path, f.name);
+
+          if (!verify.valid) {
+            fileNoValid.push({ [f.name]: [verify.error, verify.data] });
+          } else {
+            fileValid.push(f);
+          }
+        }
+        if (k === data.length - 1) resolve({ fileValid, fileNoValid });
+      });
+    } catch (error) {
+      reject(error);
+    }
+  });
+};
+
+module.exports = validationAsync;

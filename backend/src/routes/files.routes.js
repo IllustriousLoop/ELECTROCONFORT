@@ -5,7 +5,7 @@ const { valid } = require("../middleware/MES");
 module.exports = (app) => {
   router.post("/files", valid, filesController.create);
   router.post("/valid", valid, filesController.valid);
-  router.delete("/", filesController.deleteAll);
+  router.delete("/", valid, filesController.deleteAll);
 
   app.use("/api/upload", router);
 };
