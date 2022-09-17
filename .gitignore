@@ -3,6 +3,7 @@
 */package-lock.json
 */.pnp
 */.pnp.js
+*/uploads
 
 # testing
 /coverage
