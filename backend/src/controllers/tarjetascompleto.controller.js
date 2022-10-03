@@ -72,15 +72,19 @@ exports.findSpecific = (req, res) => {
 };
 
 exports.findAllIds = (req, res) => {
-  const ids = [];
+  const MES = parseInt(req.query.MES);
 
-  req.body.map((id) => ids.push(id));
-
-  let query = { _id: { $in: ids } };
-
-  TarjetasCompleto.find(query)
+  TarjetasCompleto.find({
+    MES: { $eq: MES },
+  })
     .then((data) => {
-      res.send(data);
+      let b = [];
+      data.forEach((re) => {
+        if (re["T Tarjeta"] === req.body[0]) {
+          b.push(re);
+        }
+      });
+      res.send(b);
     })
     .catch((err) => {
       res.status(500).send({

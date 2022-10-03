@@ -15,7 +15,7 @@ module.exports = (app) => {
     tarjetascompleto.findSpecific
   );
 
-  router.post("/ids", tarjetascompleto.findAllIds);
+  router.post("/ids", valid, tarjetascompleto.findAllIds);
 
   router.get("/:id", tarjetascompleto.findOne);
 

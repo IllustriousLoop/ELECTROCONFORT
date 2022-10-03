@@ -3,7 +3,7 @@ module.exports = (mongoose) => {
   var schema = mongoose.Schema(
     {
       MES: { type: Number, required: true },
-      "Tipo Transaccion": Number,
+      "Tipo Transaccion": String,
       Comercio: Number,
       Franquicia: String,
       Cuenta: Number,
@@ -24,7 +24,7 @@ module.exports = (mongoose) => {
       "Vlr Rete Ica": Number,
       "Vlr Rete Fuente": Number,
       "Vlr Abono": Number,
-      "T Tarjeta": Number,
+      "T Tarjeta": String,
     },
     { timestamps: true }
   );

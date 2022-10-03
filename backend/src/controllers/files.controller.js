@@ -138,3 +138,41 @@ exports.deleteAll = async (req, res) => {
     });
   }
 };
+
+const Auxiliar = db.Auxiliar;
+const Extracto = db.Extracto;
+const TarjetasR = db.TarjetasR;
+const TarjetasCompleto = db.TarjetasCompleto;
+
+exports.deleteByMonth = async (req, res) => {
+  const queryAll = {
+    MES: { $eq: req.query.MES },
+    // year: { $eq: 2022 },
+  };
+
+  try {
+    const dataAllA = await Auxiliar.find(queryAll);
+    const dataAllE = await Extracto.find(queryAll);
+    const dataAllTr = await TarjetasR.find(queryAll);
+    const dataAllTc = await TarjetasCompleto.find(queryAll);
+
+    await Promise.all(
+      dataAllA.map(async (f) => await Auxiliar.findByIdAndRemove(f._id)),
+      dataAllE.map(async (f) => await Extracto.findByIdAndRemove(f._id)),
+      dataAllTr.map(async (f) => await TarjetasR.findByIdAndRemove(f._id)),
+      dataAllTc.map(
+        async (f) => await TarjetasCompleto.findByIdAndRemove(f._id)
+      )
+    );
+
+    res.send({
+      message: `Auxiliar: ${dataAllA.length} Extracto: ${dataAllE.length} TarjetasR: ${dataAllTr.length} TarjetasCompleto: ${dataAllTc.length} !`,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      message: "Some error occurred while removing all records.",
+      data: error,
+    });
+  }
+};

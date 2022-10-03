@@ -9,6 +9,9 @@ import auth from "../../../hooks/context/auth";
 import { useContext, useEffect } from "react";
 import { useRouter } from "next/router";
 import CustomHead from "../../../components/layout/CustomHead";
+import EditableCell from "../../../components/table/EditCell";
+import { columnsAuxiliary } from "../../../utils";
+import { auxiliaryData } from "../../../ts/interfaces/siigo/auxiliary.interfaces";
 
 interface Props {
   auxiliary: AuxiliaryData;
@@ -23,6 +26,18 @@ const ReconciliationByMonth: NextPage<Props> = (props) => {
     if (!isAuthenticated) router.push(`/auth/signIn?redirect=${router.asPath}`);
   }, [isAuthenticated]);
 
+  const columns = columnsAuxiliary.map((col) => {
+    if (!col.editable) return col;
+    return {
+      ...col,
+      onCell: (record: auxiliaryData) => ({
+        record,
+        editable: col.editable,
+        handleSave: () => {},
+      }),
+    };
+  });
+
   return (
     <>
       <CustomHead title="Extracto y Auxiliar" />
@@ -33,7 +48,18 @@ const ReconciliationByMonth: NextPage<Props> = (props) => {
       </Row>
       <Row>
         <Col span={24}>
-          <Auxiliary {...props} />
+          <Auxiliary
+            {...props}
+            addition={{
+              columns,
+              rowClassName: () => "editable-row",
+              components: {
+                body: {
+                  cell: EditableCell,
+                },
+              },
+            }}
+          />
         </Col>
       </Row>
     </>

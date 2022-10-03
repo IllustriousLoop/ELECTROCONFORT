@@ -33,23 +33,34 @@ const useUploadFiles: useUploadFilesType = (month) => {
       setStatus("uploading");
 
       const asyncSendForm = async () => {
-        await axios.post(
-          `${process.env.NEXT_PUBLIC_BACKEND_URL}/upload/files?MES=${month}`,
-          formData,
-          {
-            headers: {
-              "Content-Type": "multipart/form-data",
-            },
-          }
-        );
-        setFileList([]);
+        try {
+          const res = await axios.post(
+            `${process.env.NEXT_PUBLIC_BACKEND_URL}/upload/files?MES=${month}`,
+            formData,
+            {
+              headers: {
+                "Content-Type": "multipart/form-data",
+              },
+            }
+          );
+          setFileList([]);
+          toast.success(res.data.message);
+          const r = await axios.post(
+            `${process.env.NEXT_PUBLIC_BACKEND_URL}/upload/valid/?MES=${month}`
+          );
+          toast.success(r.data.message);
+        } catch (error: any) {
+          toast.error(error.response.data.message);
+          console.log(error.response.data.data);
+        }
       };
 
-      toast.promise(asyncSendForm, {
+      asyncSendForm();
+      /* toast.promise(asyncSendForm, {
         pending: "Subiendo archivos...",
         success: "Archivos subidos con exito",
         error: "No se pudieron subir los archivos",
-      });
+      }); */
 
       setStatus("ready");
     } else {
